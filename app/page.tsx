@@ -1,7 +1,19 @@
 import style from "@/css/Home.module.css";
 import React from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
+import PillarShowcase from "@/components/pillar";
 
+export interface Pillar {
+  logo?: string;
+  logoAlt?: string;
+  label: string;
+  image: string;
+  imageAlt: string;
+  /** Relative height of the pillar (1 = tallest). */
+  heightRatio?: number;
+  /** Relative width of the pillar (1 = standard). On desktop affects flex-grow. */
+  widthRatio?: number;
+}
 const galleryData: GalleryItem[] = [
   {
     common: "Lion",
@@ -140,41 +152,164 @@ const galleryData: GalleryItem[] = [
     },
   },
 ];
+
+const pillars: Pillar[] = [
+  {
+    label: "Lion",
+    image:
+      "https://images.unsplash.com/photo-1583499871880-de841d1ace2a?w=900&auto=format&fit=crop&q=80",
+    imageAlt: "lion couple kissing on a brown rock",
+    heightRatio: 0.7,
+    widthRatio: 0.85,
+  },
+  {
+    label: "Asiatic elephant",
+    image:
+      "https://images.unsplash.com/photo-1571406761758-9a3eed5338ef?w=900&auto=format&fit=crop&q=80",
+    imageAlt: "herd of Sri Lankan elephants",
+    heightRatio: 0.95,
+    widthRatio: 1.1,
+  },
+  {
+    label: "Red-tailed cockatoo",
+    image:
+      "https://images.unsplash.com/photo-1619664208054-41eefeab29e9?w=900&auto=format&fit=crop&q=80",
+    imageAlt: "close-up of a black cockatoo",
+    heightRatio: 0.85,
+    widthRatio: 0.95,
+  },
+  {
+    label: "Dromedary",
+    image:
+      "https://images.unsplash.com/photo-1662841238473-f4b137e123cb?w=900&auto=format&fit=crop&q=80",
+    imageAlt: "camel and her new born calf",
+    heightRatio: 1,
+    widthRatio: 1.2,
+  },
+  {
+    label: "Polar bear",
+    image:
+      "https://images.unsplash.com/photo-1589648751789-c8ecb7a88bd5?w=900&auto=format&fit=crop&q=80",
+    imageAlt: "polar bear on the snow",
+    heightRatio: 0.9,
+    widthRatio: 0.9,
+  },
+];
 export default function Home() {
   return (
-    <section className={style.outerContainer}>
-      <div className={style.container}>
-        <div className={style.title}>
-          <h1>
-            <span>Reimagining</span> <span>Investing</span>
-          </h1>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="11"
-            height="19"
-            viewBox="0 0 11 19"
-            fill="none"
-          >
-            <path
-              d="M1.5 1.5L9.5 9.5L1.5 17.5"
-              stroke="white"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+    <>
+      <section className={style.outerContainer}>
+        <div className={style.container}>
+          <div className={style.title}>
+            <h1>
+              <span>Reimagining</span> <span>Investing</span>
+            </h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="19"
+              viewBox="0 0 11 19"
+              fill="none"
+            >
+              <path
+                d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <p className={style.desc}>
+            Traditional investing measures profit; we measures impact through
+            <span> Sphere of Influence (SOI)</span>, where capital shapes
+            societal outcomes.
+          </p>
+          <button className={style.button}>ABOUT US</button>
         </div>
-        <p className={style.desc}>
-          Traditional investing measures profit; we measures impact through
-          <span> Sphere of Influence (SOI)</span>, where capital shapes societal
-          outcomes.
-        </p>
-        <button className={style.button}>ABOUT US</button>
-      </div>
 
-      <div className={style.galleryWrap}>
-        <CircularGallery items={galleryData} />
-      </div>
-    </section>
+        <div className={style.galleryWrap}>
+          <CircularGallery items={galleryData} />
+        </div>
+      </section>
+
+      <section className={style.outerContainer}>
+        <div className={style.container}>
+          <div className={style.title}>
+            <h1>
+              <span>Reimagining</span> <span>Ecosystems</span>
+            </h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="19"
+              viewBox="0 0 11 19"
+              fill="none"
+            >
+              <path
+                d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <p className={style.desc}>
+            Economic corridors hold untapped potential often constrained by gaps
+            in social infrastructure. These white spaces are identified and
+            transformed into{" "}
+            <span> GRID (Growth-Ready Innovation Destinations) </span>
+            integrating platforms that combine high-quality real assets with
+            enabling services to create cohesive, high-performance ecosystems.
+          </p>
+          <button className={style.button}>ABOUT US</button>
+        </div>
+
+        <div className={style.galleryWrap}>
+          {/* <CircularGallery items={galleryData} /> */}
+          <PillarShowcase pillars={pillars} autoScrollSpeed={0.6} />
+        </div>
+      </section>
+
+      <section className={style.outerContainer}>
+        <div className={style.container}>
+          <div className={style.title}>
+            <h1>
+              <span>Reimagining</span> <span>Platforms</span>
+            </h1>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="19"
+              viewBox="0 0 11 19"
+              fill="none"
+            >
+              <path
+                d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+          <p className={style.desc}>
+            A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
+            Healthcare, and Hospitality built on the belief that assets are
+            catalysts for societal transformation, not standalone plays.Unified
+            into three platforms <span> PowerX, PowerEd, and PowerPod </span>{" "}
+            these systems are designed to interconnect, unlock synergies, and
+            amplify impact beyond sectors.
+          </p>
+          <button className={style.button}>EXPLORE GRIDS</button>
+        </div>
+
+        <div className={style.galleryWrap}>
+          {/* <CircularGallery items={galleryData} /> */}
+          <PillarShowcase pillars={pillars} autoScrollSpeed={0.6} />
+        </div>
+      </section>
+    </>
   );
 }

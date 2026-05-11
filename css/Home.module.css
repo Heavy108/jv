@@ -1,11 +1,10 @@
-
 .outerContainer {
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
     min-height: 100svh;
     padding: 4rem 1.5rem 1rem 1.5rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* removed align-items: center — was preventing galleryWrap from stretching */
     overflow: hidden;
 }
 
@@ -17,18 +16,19 @@
     background: rgba(217, 217, 217, 0.20);
     box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
     flex-shrink: 0;
-    max-width: 1200px;
-}
-.galleryWrap {
-    flex: 1;
-        height: 380px; 
-
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;        /* center horizontally */
+}
+
+.galleryWrap {
+    width: 100%;
+    height: 380px;          /* mobile: fixed height */
+    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-top: 1rem;
 }
 
 .title h1 {
@@ -64,7 +64,7 @@
     font-weight: 400;
     line-height: 1.25rem; 
     letter-spacing: 0.035rem;
-    margin: 0.5rem 0rem 1rem 0rem;
+    margin: 0.5rem 0 1rem 0;
 }
 
 .desc span {
@@ -92,48 +92,62 @@
     cursor: pointer;
 }
 
-@media only screen and (min-width:768px){
-    .outerContainer{
-        padding: 7rem 3rem 0rem 3rem;
+@media only screen and (min-width: 768px) {
+    .outerContainer {
+        padding: 7rem 3rem 1rem 3rem;
     }
-    .container{
+    .container {
         padding: 2rem;
     }
-    .title h1{
+    .title h1 {
         font-size: 3rem;
     }
-    .desc{
+    .desc {
         font-size: 1.125rem;
-        margin: 0.5rem 0rem 1.5rem 0rem;
+        margin: 0.5rem 0 1.5rem 0;
     }
-    .button{
+    .button {
         font-size: 1.125rem;
         padding: 1rem 1.5rem;
         height: 3rem;
     }
+    .galleryWrap {
+        height: 480px;
+    }
 }
 
-@media only screen and (min-width:1024px) {
-    .title{
+@media only screen and (min-width: 1024px) {
+    .outerContainer {
+        height: 100svh;          /* fixed height enables flex: 1 to work */
+        min-height: 0;
+    }
+    .title {
         align-items: center;
     }
-    .container{
+    .container {
         border-radius: 1.5rem;
+    }
+    .galleryWrap {
+        flex: 1;
+        height: auto;
+        min-height: 0;
+        align-items: stretch;
+        margin-top: 1.5rem;
     }
 }
 
-@media only screen and (min-width:1440px){
-    .outerContainer{
-        padding: 8.5rem 5rem 0rem 5rem;
+@media only screen and (min-width: 1440px) {
+    .outerContainer {
+        padding: 5rem 5rem 1rem 5rem;
     }
-    .container{
+    .container {
         padding: 2.5rem 3rem;
     }
-    .title h1{
+    .title h1 {
         font-size: 4rem;
     }
-    .desc{
+    .desc {
         font-size: 1.25rem;
-        margin: 0.5rem 0rem 2rem 0rem;
+        margin: 0.5rem 0 2rem 0;
     }
 }
