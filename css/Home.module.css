@@ -1,0 +1,139 @@
+
+.outerContainer {
+    background: linear-gradient(180deg, #194798 0%, #081732 100%);
+    min-height: 100svh;
+    padding: 4rem 1.5rem 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    padding: 1rem;
+    color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #9BBBF1;
+    background: rgba(217, 217, 217, 0.20);
+    box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
+    flex-shrink: 0;
+    max-width: 1200px;
+}
+.galleryWrap {
+    flex: 1;
+        height: 380px; 
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 1rem;
+}
+
+.title h1 {
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 1.75rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.0525rem;
+    text-transform: uppercase;
+}
+
+.title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title svg {
+    width: 2rem;
+    height: 2rem;  
+}
+
+.title span:last-child {
+    font-weight: 600;
+}
+
+.desc {
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.25rem; 
+    letter-spacing: 0.035rem;
+    margin: 0.5rem 0rem 1rem 0rem;
+}
+
+.desc span {
+   font-weight: 600;
+}
+
+.button {
+    display: flex;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #EB7F83;
+    background: linear-gradient(319deg, #EB7F83 -1.9%, rgba(245, 174, 176, 0.00) 17.34%, #FFDBDC 87.36%), #DA2128;
+    background-blend-mode: soft-light, normal;
+    box-shadow: 0 105px 29px 0 rgba(215, 42, 48, 0.00), 0 67px 27px 0 rgba(215, 42, 48, 0.01), 0 38px 23px 0 rgba(215, 42, 48, 0.04), 0 17px 17px 0 rgba(215, 42, 48, 0.07), 0 4px 9px 0 rgba(215, 42, 48, 0.08);
+    color: #FFF;
+    font-family: Montserrat;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+@media only screen and (min-width:768px){
+    .outerContainer{
+        padding: 7rem 3rem 0rem 3rem;
+    }
+    .container{
+        padding: 2rem;
+    }
+    .title h1{
+        font-size: 3rem;
+    }
+    .desc{
+        font-size: 1.125rem;
+        margin: 0.5rem 0rem 1.5rem 0rem;
+    }
+    .button{
+        font-size: 1.125rem;
+        padding: 1rem 1.5rem;
+        height: 3rem;
+    }
+}
+
+@media only screen and (min-width:1024px) {
+    .title{
+        align-items: center;
+    }
+    .container{
+        border-radius: 1.5rem;
+    }
+}
+
+@media only screen and (min-width:1440px){
+    .outerContainer{
+        padding: 8.5rem 5rem 0rem 5rem;
+    }
+    .container{
+        padding: 2.5rem 3rem;
+    }
+    .title h1{
+        font-size: 4rem;
+    }
+    .desc{
+        font-size: 1.25rem;
+        margin: 0.5rem 0rem 2rem 0rem;
+    }
+}
