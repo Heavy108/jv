@@ -134,8 +134,8 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     // Responsive sizing
     const minDim = Math.min(size.w, size.h) || 0;
     const computedCardSize =
-      cardSize ?? Math.max(140, Math.min(280, minDim * 0.55));
-    const minRadius = (computedCardSize * items.length) / (2 * Math.PI) + 10;
+      cardSize ?? Math.max(220, Math.min(360, minDim * 0.7));
+    const minRadius = (computedCardSize * items.length) / (2 * Math.PI) + 45;
     const computedRadius =
       radius ?? Math.max(minRadius, Math.min(minDim * 0.28, 420));
     const halfSize = computedCardSize / 2;
