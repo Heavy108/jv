@@ -10,7 +10,7 @@
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
     /* Changed to exact height to ensure perfect snapping */
     height: 100dvh; 
-    padding: 5.5rem 0rem 1rem 0rem;
+    padding: 5.5rem 0rem 0rem 0rem;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -108,13 +108,16 @@
 }
 .footerWrap {
     scroll-snap-align: end; 
+     position: relative;
+    z-index: 100001;
+    scroll-snap-align: end;
 }
 @media only screen and (min-width: 768px) {
     .extrapad{
-        padding: 0rem;
+        padding: 0rem 3rem;
     }
     .outerContainer {
-        padding: 7rem 3rem 0rem 3rem;
+        padding: 7rem 0rem 0rem 0rem;
     }
     .container {
         padding: 2rem;

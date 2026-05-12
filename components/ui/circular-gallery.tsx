@@ -56,7 +56,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     const gestureDecided = useRef<null | "horizontal" | "vertical">(null);
     const isDraggingRef = useRef(false);
 
-    // Keep ref in sync with state for use inside native listeners
+    
     useEffect(() => {
       isDraggingRef.current = isDragging;
     }, [isDragging]);

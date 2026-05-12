@@ -1,6 +1,6 @@
 "use client";
 import style from "@/css/Home.module.css";
-import React, { useRef } from "react";
+import React, { useRef , useEffect } from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import PillarShowcase from "@/components/pillar";
 import StatCardShowcase, { StatCard } from "@/components/StatCardShowcase";
@@ -29,12 +29,7 @@ import c3 from "@/assets/c3.png";
 import c4 from "@/assets/c4.png";
 import c5 from "@/assets/c5.png";
 
-// Asset Imports - Pillars (Ecosystems)
-import ecosystem1 from "@/assets/ecosystem1.png";
-import ecosystem2 from "@/assets/Ecosystem Img 02.png";
-import ecosystem3 from "@/assets/Ecosystem3.png";
-import ecosystem4 from "@/assets/Ecosystem4.png";
-import ecosystem5 from "@/assets/Ecosystem5.png";
+
 import skylineImg from "@/assets/Eco.png"
 import { StaticImageData } from "next/image";
 
@@ -197,44 +192,32 @@ const galleryData: GalleryItem[] = [
     },
   },
 ];
+const footerRef = useRef<HTMLDivElement>(null);
+useEffect(() => {
+  const footerEl = footerRef.current;
+  if (!footerEl) return;
 
-const pillars: Pillar[] = [
-  {
-    label: "Ecosystem One",
-    image: ecosystem1,
-    imageAlt: "First ecosystem view",
-    heightRatio: 0.7,
-    widthRatio: 0.85,
-  },
-  {
-    label: "Ecosystem Two",
-    image: ecosystem2,
-    imageAlt: "Second ecosystem view",
-    heightRatio: 0.95,
-    widthRatio: 1.1,
-  },
-  {
-    label: "Ecosystem Three",
-    image: ecosystem3,
-    imageAlt: "Third ecosystem view",
-    heightRatio: 0.85,
-    widthRatio: 0.95,
-  },
-  {
-    label: "Ecosystem Four",
-    image: ecosystem4,
-    imageAlt: "Fourth ecosystem view",
-    heightRatio: 1,
-    widthRatio: 1.2,
-  },
-  {
-    label: "Ecosystem Five",
-    image: ecosystem5,
-    imageAlt: "Fifth ecosystem view",
-    heightRatio: 0.9,
-    widthRatio: 0.9,
-  },
-];
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        document.body.classList.add("footer-visible");
+      } else {
+        document.body.classList.remove("footer-visible");
+      }
+    },
+    {
+      // Trigger when at least 20% of the footer is in view
+      threshold: 0.2,
+    },
+  );
+
+  observer.observe(footerEl);
+
+  return () => {
+    observer.disconnect();
+    document.body.classList.remove("footer-visible");
+  };
+}, []);
 
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);

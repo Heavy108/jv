@@ -130,7 +130,10 @@
 .active.hamburgerIcon:after {
   transform: translateY(0) rotate(-45deg);
 }
+.menuBarContainer{
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
+}
 .menu {
   position: absolute;
   top: 0;
