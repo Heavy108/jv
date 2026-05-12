@@ -1,0 +1,263 @@
+.menuContainer {
+  position: fixed;
+  width: 100%;
+  
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+}
+
+.menuBar {
+  position: fixed;
+  top: 0;
+  width: calc(100% - 4em);
+  height: 64px;
+  margin: 0.75rem;
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: 1rem;
+border: 1px solid rgba(255, 255, 255, 0.50);
+ background: rgba(0, 0, 0, 0.25);
+backdrop-filter: blur(16px);
+  pointer-events: all;
+  z-index: 100000;
+  will-change: transform, height;
+}
+
+.menuBarContainer {
+  background-color: transparent;
+  width: 100%;
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+}
+.menuLogo{
+  display: flex;
+  justify-content: center;
+}
+.menuLogo a {
+  position: relative;
+  display: inline-block;
+  top: -0.05em;
+  color: var(--bg, #fff);
+  text-decoration: none;
+}
+
+.menuActions {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+.menuToggle {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.hamburgerIcon {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  height: 40px;
+  width: 60px;
+  transition: all 300ms;
+  border-radius: 0.5rem;
+border: 1px solid rgba(255, 255, 255, 0.50);
+
+background: rgba(255, 255, 255, 0.10);
+backdrop-filter: blur(12.5px);
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburgerIcon:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hamburgerIcon:before,
+.hamburgerIcon:after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 1.5px;
+  background: #fff;
+  transition: all 300ms ease-in-out;
+  transition-delay: 150ms;
+  will-change: transform;
+}
+
+.hamburgerIcon:before {
+  transform: translateY(-3px);
+}
+
+.hamburgerIcon:after {
+  transform: translateY(3px);
+}
+
+.active.hamburgerIcon:before {
+  transform: translateY(0) rotate(45deg);
+}
+
+.active.hamburgerIcon:after {
+  transform: translateY(0) rotate(-45deg);
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 4em);
+  height: calc(100svh - 4em);
+  background: transparent;
+  border-radius: 1rem;
+  overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 100000;
+  margin: 2em;
+  
+}
+
+.menuCol {
+  display: flex;
+}
+
+/* .menuSubCol {
+  display: flex;
+} */
+
+.menuLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  
+}
+.menuLink {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  font-family: var(--font-clashdisplay);
+  font-weight: 500;
+}
+.menuLink::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s ease;
+}
+
+.menuLink:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+.menuLinkItem {
+  position: relative;
+  padding: 1em 0 0.125em 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+  text-align: center;
+  pointer-events: all;
+  overflow: hidden;
+}
+
+.menuLinkItemHolder {
+  position: relative;
+  will-change: transform;
+}
+
+.menuLinkItemHolder > a {
+  
+  font-size: 3.5rem;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  display: block;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.menuLinkItemHolder:hover > a {
+  color: rgba(255, 255, 255, 1);
+}
+
+.subMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.subLink {
+  
+  font-size: 1.5rem;
+    font-weight: 500;
+
+  color: rgba(255, 255, 255, 0.65) !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 2px;
+  transition: color 0.3s ease;
+}
+
+.subLink:hover {
+  color: #fff !important;
+}
+
+@media (max-width: 1000px) {
+  .menu {
+    width: calc(100% - 2.5em);
+    height: calc(100svh - 2.5em);
+    margin: 1.25em;
+  }
+
+  .menuBar {
+    margin: 0.75rem;
+    width: calc(100% - 2.5em);
+  }
+
+  .menuToggle {
+    justify-content: flex-end;
+  }
+
+  .menuCol {
+    width: 100%;
+   flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+  }
+
+  .menuLinkItemHolder > a {
+    font-size: 10vw;
+  }
+
+  .subLink {
+    font-size: 4.5vw;
+  }
+}

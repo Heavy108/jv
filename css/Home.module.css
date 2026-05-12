@@ -1,11 +1,23 @@
+/* NEW: The scroll container that enforces the snapping */
+.wrapper {
+    height: 100vh;
+    height: 100dvh; /* fallback for mobile browsers */
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+}
+
 .outerContainer {
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
-    min-height: 100svh;
+    /* Changed to exact height to ensure perfect snapping */
+    height: 100svh; 
     padding: 4rem 1.5rem 1rem 1.5rem;
     display: flex;
     flex-direction: column;
-    /* removed align-items: center — was preventing galleryWrap from stretching */
     overflow: hidden;
+    
+    /* NEW: Forces the scroll to snap to the top of this container and stops momentum to prevent skipping */
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
 }
 
 .container {
@@ -91,7 +103,9 @@
     text-transform: uppercase;
     cursor: pointer;
 }
-
+.footerWrap {
+    scroll-snap-align: end; 
+}
 @media only screen and (min-width: 768px) {
     .outerContainer {
         padding: 7rem 3rem 1rem 3rem;
@@ -138,7 +152,7 @@
 
 @media only screen and (min-width: 1440px) {
     .outerContainer {
-        padding: 5rem 5rem 1rem 5rem;
+        padding: 7.5rem 5rem 1rem 5rem;
     }
     .container {
         padding: 2.5rem 3rem;

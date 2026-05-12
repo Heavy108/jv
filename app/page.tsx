@@ -1,10 +1,17 @@
+"use client"
 import style from "@/css/Home.module.css";
 import React from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import PillarShowcase from "@/components/pillar";
 import StatCardShowcase, { StatCard } from "@/components/StatCardShowcase";
 import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 const stats: StatCard[] = [
   {
     image:
@@ -236,8 +243,41 @@ const pillars: Pillar[] = [
   },
 ];
 export default function Home() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+ useGSAP(
+   () => {
+     const mm = gsap.matchMedia();
+
+     mm.add("(min-width: 1024px)", () => {
+       const sections = gsap.utils.toArray<HTMLElement>(
+         `.${style.outerContainer}`,
+       );
+
+       // CREATE ONLY ONE SCROLL TRIGGER FOR THE WHOLE WRAPPER
+       ScrollTrigger.create({
+         trigger: wrapperRef.current,
+         start: "top top",
+         end: "bottom bottom",
+         snap: {
+           // Divides the total scroll area by the number of transitions
+           snapTo: 1 / (sections.length - 1),
+           duration: { min: 0.3, max: 0.8 },
+           delay: 0.1,
+           ease: "power2.inOut",
+         },
+       });
+     });
+
+     return () => mm.revert();
+   },
+   { scope: wrapperRef },
+ );
+
   return (
-    <>
+    <div ref={wrapperRef} className={style.wrapper}>
+      <Navbar />
+
       <section className={style.outerContainer}>
         <div className={style.container}>
           <div className={style.title}>
@@ -267,7 +307,6 @@ export default function Home() {
           </p>
           <button className={style.button}>ABOUT US</button>
         </div>
-
         <div className={style.galleryWrap}>
           <CircularGallery items={galleryData} />
         </div>
@@ -279,21 +318,7 @@ export default function Home() {
             <h1>
               <span>Reimagining</span> <span>Ecosystems</span>
             </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="11"
-              height="19"
-              viewBox="0 0 11 19"
-              fill="none"
-            >
-              <path
-                d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <svg /* same */ />
           </div>
           <p className={style.desc}>
             Economic corridors hold untapped potential often constrained by gaps
@@ -305,9 +330,7 @@ export default function Home() {
           </p>
           <button className={style.button}>ABOUT US</button>
         </div>
-
         <div className={style.galleryWrap}>
-          {/* <CircularGallery items={galleryData} /> */}
           <PillarShowcase pillars={pillars} autoScrollSpeed={0.6} />
         </div>
       </section>
@@ -318,39 +341,26 @@ export default function Home() {
             <h1>
               <span>Reimagining</span> <span>Platforms</span>
             </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="11"
-              height="19"
-              viewBox="0 0 11 19"
-              fill="none"
-            >
-              <path
-                d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <svg /* same */ />
           </div>
           <p className={style.desc}>
             A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
             Healthcare, and Hospitality built on the belief that assets are
-            catalysts for societal transformation, not standalone plays.Unified
-            into three platforms <span> PowerX, PowerEd, and PowerPod </span>{" "}
+            catalysts for societal transformation, not standalone plays. Unified
+            into three platforms <span> PowerX, PowerEd, and PowerPod </span>
             these systems are designed to interconnect, unlock synergies, and
             amplify impact beyond sectors.
           </p>
           <button className={style.button}>EXPLORE GRIDS</button>
         </div>
-
         <div className={style.galleryWrap}>
-          {/* <CircularGallery items={galleryData} /> */}
           <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
         </div>
       </section>
-      <Footer/>
-    </>
+
+      <div className={style.footerWrap}>
+        <Footer />
+      </div>
+    </div>
   );
 }
