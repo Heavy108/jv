@@ -5,6 +5,8 @@
   font-family: Montserrat, sans-serif;
   padding: 3rem 1.5rem;
   width: 100%;
+  min-height: 100dvh;           /* fill one viewport on mobile */
+  min-height: 100svh;   
 }
 
 .container {
@@ -210,6 +212,7 @@ line-height: normal;
 }
 .footer{
     padding: 4rem 3rem;
+    min-height: 0;
 }
 .bottomSection{
     margin-top: 3rem;
