@@ -238,12 +238,12 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                     style={{ objectPosition: item.photo.pos || "center" }}
                   />
                   <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent text-white pointer-events-none">
-                    <h2 className="text-base font-bold leading-tight">
+                    <h2 className="text-2xl font-bold leading-tight">
                       {item.stats}
                     </h2>
-                    <em className="text-xs  opacity-80">
+                    
                       {item.binomial}
-                    </em>
+                   
                   </div>
                 </div>
               </div>

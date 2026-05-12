@@ -35,7 +35,7 @@ import ecosystem2 from "@/assets/Ecosystem Img 02.png";
 import ecosystem3 from "@/assets/Ecosystem3.png";
 import ecosystem4 from "@/assets/Ecosystem4.png";
 import ecosystem5 from "@/assets/Ecosystem5.png";
-
+import skylineImg from "@/assets/Eco.png"
 import { StaticImageData } from "next/image";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -100,7 +100,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 2",
     stats: "XX",
-    binomial: "Ecosystems",
+    binomial: "Scientists & Researchers Supported",
     photo: {
       url: c2,
       text: "abstract view of c2",
@@ -111,7 +111,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 3",
     stats: "XX",
-    binomial: "Development",
+    binomial: "Institutions Created",
     photo: {
       url: c3,
       text: "abstract view of c3",
@@ -121,8 +121,8 @@ const galleryData: GalleryItem[] = [
   },
   {
     common: "Gallery Item 4",
-    stats: "XX",
-    binomial: "Growth",
+    stats: "14",
+    binomial: "Intrapreneurs Nurtured",
     photo: {
       url: c4,
       text: "abstract view of c4",
@@ -133,7 +133,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 5",
     stats: "XX",
-    binomial: "Synergy",
+    binomial: "Jobs Created ",
     photo: {
       url: c5,
       text: "abstract view of c5",
@@ -155,7 +155,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 7",
     stats: "XX",
-    binomial: "Ecosystems",
+    binomial: "Scientists & Researchers Supported",
     photo: {
       url: c2,
       text: "abstract view of c2",
@@ -166,7 +166,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 8",
     stats: "XX",
-    binomial: "Development",
+    binomial: "Institutions Created",
     photo: {
       url: c3,
       text: "abstract view of c3",
@@ -177,7 +177,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 9",
     stats: "XX",
-    binomial: "Growth",
+    binomial: "Intrapreneurs Nurtured",
     photo: {
       url: c4,
       text: "abstract view of c4",
@@ -188,7 +188,7 @@ const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 10",
     stats: "XX",
-    binomial: "Synergy",
+    binomial: "Jobs Created",
     photo: {
       url: c5,
       text: "abstract view of c5",
@@ -271,33 +271,35 @@ export default function Home() {
       <Navbar />
 
       <section className={style.outerContainer}>
-        <div className={style.container}>
-          <div className={style.title}>
-            <h1>
-              <span>Reimagining</span> <span>Investing</span>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="11"
-              height="19"
-              viewBox="0 0 11 19"
-              fill="none"
-            >
-              <path
-                d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+        <div className={style.extrapad}>
+          <div className={style.container}>
+            <div className={style.title}>
+              <h1>
+                <span>Reimagining</span> <span>Investing</span>
+              </h1>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="11"
+                height="19"
+                viewBox="0 0 11 19"
+                fill="none"
+              >
+                <path
+                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <p className={style.desc}>
+              Traditional investing measures profit; we measures impact through
+              <span> Sphere of Influence (SOI)</span>, where capital shapes
+              societal outcomes.
+            </p>
+            <button className={style.button}>ABOUT US</button>
           </div>
-          <p className={style.desc}>
-            Traditional investing measures profit; we measures impact through
-            <span> Sphere of Influence (SOI)</span>, where capital shapes
-            societal outcomes.
-          </p>
-          <button className={style.button}>ABOUT US</button>
         </div>
         <div className={style.galleryWrap}>
           <CircularGallery items={galleryData} />
@@ -305,73 +307,78 @@ export default function Home() {
       </section>
 
       <section className={style.outerContainer}>
-        <div className={style.container}>
-          <div className={style.title}>
-            <h1>
-              <span>Reimagining</span> <span>Ecosystems</span>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="11"
-              height="19"
-              viewBox="0 0 11 19"
-              fill="none"
-            >
-              <path
-                d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+        <div className={style.extrapad}>
+          <div className={style.container}>
+            <div className={style.title}>
+              <h1>
+                <span>Reimagining</span> <span>Ecosystems</span>
+              </h1>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="11"
+                height="19"
+                viewBox="0 0 11 19"
+                fill="none"
+              >
+                <path
+                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <p className={style.desc}>
+              Economic corridors hold untapped potential often constrained by
+              gaps in social infrastructure. These white spaces are identified
+              and transformed into{" "}
+              <span> GRID (Growth-Ready Innovation Destinations) </span>
+              integrating platforms that combine high-quality real assets with
+              enabling services to create cohesive, high-performance ecosystems.
+            </p>
+            <button className={style.button}>EXPLORE GRID</button>
           </div>
-          <p className={style.desc}>
-            Economic corridors hold untapped potential often constrained by gaps
-            in social infrastructure. These white spaces are identified and
-            transformed into{" "}
-            <span> GRID (Growth-Ready Innovation Destinations) </span>
-            integrating platforms that combine high-quality real assets with
-            enabling services to create cohesive, high-performance ecosystems.
-          </p>
-          <button className={style.button}>ABOUT US</button>
         </div>
         <div className={style.galleryWrap}>
-          <PillarShowcase pillars={pillars} autoScrollSpeed={0.6} />
+          <PillarShowcase image={skylineImg} imageAlt="Ecosystem" />
         </div>
       </section>
 
       <section className={style.outerContainer}>
-        <div className={style.container}>
-          <div className={style.title}>
-            <h1>
-              <span>Reimagining</span> <span>Platforms</span>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="11"
-              height="19"
-              viewBox="0 0 11 19"
-              fill="none"
-            >
-              <path
-                d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                stroke="white"
-                strokeWidth="3"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+        <div className={style.extrapad}>
+          <div className={style.container}>
+            <div className={style.title}>
+              <h1>
+                <span>Reimagining</span> <span>Platforms</span>
+              </h1>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="11"
+                height="19"
+                viewBox="0 0 11 19"
+                fill="none"
+              >
+                <path
+                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                  stroke="white"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            <p className={style.desc}>
+              A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
+              Healthcare, and Hospitality built on the belief that assets are
+              catalysts for societal transformation, not standalone plays.
+              Unified into three platforms{" "}
+              <span> PowerX, PowerEd, and PowerPod </span>
+              these systems are designed to interconnect, unlock synergies, and
+              amplify impact beyond sectors.
+            </p>
+            <button className={style.button}>ABOUT US</button>
           </div>
-          <p className={style.desc}>
-            A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
-            Healthcare, and Hospitality built on the belief that assets are
-            catalysts for societal transformation, not standalone plays. Unified
-            into three platforms <span> PowerX, PowerEd, and PowerPod </span>
-            these systems are designed to interconnect, unlock synergies, and
-            amplify impact beyond sectors.
-          </p>
-          <button className={style.button}>EXPLORE GRIDS</button>
         </div>
         <div className={style.galleryWrap}>
           <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />

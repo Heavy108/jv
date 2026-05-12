@@ -1,7 +1,7 @@
 .menuContainer {
   position: fixed;
   width: 100%;
-  
+
   height: 100vh;
   top: 0;
   left: 0;
@@ -14,20 +14,36 @@
 .menuBar {
   position: fixed;
   top: 0;
-  width: calc(100% - 4em);
+  width: calc(100% );
+  max-width: 1220px;
   height: 64px;
   margin: 0.75rem;
-  
+
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   border-radius: 1rem;
-border: 1px solid rgba(255, 255, 255, 0.50);
- background: rgba(0, 0, 0, 0.25);
-backdrop-filter: blur(16px);
+
+  /* Transparent by default */
+  border: 1px solid transparent;
+  background: transparent;
+  backdrop-filter: none;
+
+  /* Smooth transition when menu opens/closes — matches the menu's 1s power4.inOut animation */
+  transition: background 1s cubic-bezier(0.77, 0, 0.175, 1),
+    border-color 1s cubic-bezier(0.77, 0, 0.175, 1),
+    backdrop-filter 1s cubic-bezier(0.77, 0, 0.175, 1);
+
   pointer-events: all;
   z-index: 100000;
   will-change: transform, height;
+}
+
+/* Apply the glass background only when menu is open */
+.menuBarOpen {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(16px);
 }
 
 .menuBarContainer {
@@ -37,9 +53,9 @@ backdrop-filter: blur(16px);
   display: flex;
   justify-content: space-between;
   align-items: center;
- padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+  padding: 0.5rem 1.5rem 0.5rem 2rem;
 }
-.menuLogo{
+.menuLogo {
   display: flex;
   justify-content: center;
 }
@@ -75,10 +91,10 @@ backdrop-filter: blur(16px);
   width: 60px;
   transition: all 300ms;
   border-radius: 0.5rem;
-border: 1px solid rgba(255, 255, 255, 0.50);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 
-background: rgba(255, 255, 255, 0.10);
-backdrop-filter: blur(12.5px);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12.5px);
   cursor: pointer;
   padding: 0;
 }
@@ -119,7 +135,11 @@ backdrop-filter: blur(12.5px);
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 4em);
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100% );
+  max-width: 1220px;
   height: calc(100svh - 4em);
   background: transparent;
   border-radius: 1rem;
@@ -130,24 +150,19 @@ backdrop-filter: blur(12.5px);
   align-items: center;
   pointer-events: none;
   z-index: 100000;
-  margin: 2em;
-  
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .menuCol {
   display: flex;
 }
 
-/* .menuSubCol {
-  display: flex;
-} */
-
 .menuLinks {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  
 }
 .menuLink {
   position: relative;
@@ -189,7 +204,6 @@ backdrop-filter: blur(12.5px);
 }
 
 .menuLinkItemHolder > a {
-  
   font-size: 3.5rem;
   font-weight: 500;
   color: #fff;
@@ -215,9 +229,8 @@ backdrop-filter: blur(12.5px);
 }
 
 .subLink {
-  
   font-size: 1.5rem;
-    font-weight: 500;
+  font-weight: 500;
 
   color: rgba(255, 255, 255, 0.65) !important;
   text-transform: uppercase;
@@ -234,7 +247,8 @@ backdrop-filter: blur(12.5px);
   .menu {
     width: calc(100% - 2.5em);
     height: calc(100svh - 2.5em);
-    margin: 1.25em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
   }
 
   .menuBar {
@@ -248,8 +262,8 @@ backdrop-filter: blur(12.5px);
 
   .menuCol {
     width: 100%;
-   flex-direction: column;
-    justify-content: center; 
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
   }
 

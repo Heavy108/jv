@@ -1,27 +1,19 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import style from "@/css/PillarShowcase.module.css";
-// 1. Import StaticImageData from Next.js
 import { StaticImageData } from "next/image";
 
-export interface Pillar {
-  logo?: string | StaticImageData; // Allow StaticImageData for logos just in case
-  logoAlt?: string;
-  label: string;
-  image: string | StaticImageData; // 2. Allow Next.js static imports
-  imageAlt: string;
-  heightRatio?: number;
-  widthRatio?: number;
-}
-
 interface PillarShowcaseProps {
-  pillars: Pillar[];
+  /** Single skyline image shown across the section */
+  image: string | StaticImageData;
+  imageAlt?: string;
   /** Pixels per frame on mobile auto-scroll. 0 disables. */
   autoScrollSpeed?: number;
 }
 
 const PillarShowcase: React.FC<PillarShowcaseProps> = ({
-  pillars,
+  image,
+  imageAlt = "",
   autoScrollSpeed = 0.6,
 }) => {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
@@ -29,10 +21,7 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
   const pausedRef = useRef(false);
   const rafRef = useRef<number | null>(null);
 
-  // Duplicate the pillars for seamless infinite scrolling.
-  // The first half is the "real" set; the second half is the visual duplicate
-  // we silently loop back to when crossing the boundary.
-  const loopedPillars = [...pillars, ...pillars];
+  const imgSrc = typeof image === "string" ? image : image.src;
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -43,13 +32,11 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
 
     const loop = () => {
       if (!pausedRef.current && canScroll()) {
-        // Width of ONE set of pillars (half of the duplicated row)
+        // Width of ONE image copy (half of the duplicated row)
         const oneSetWidth = row.scrollWidth / 2;
 
         el.scrollLeft += autoScrollSpeed;
 
-        // When we've scrolled past one full set, jump back by that amount.
-        // The user sees no jump because the second set is visually identical.
         if (el.scrollLeft >= oneSetWidth) {
           el.scrollLeft -= oneSetWidth;
         }
@@ -68,7 +55,6 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       }, 1500);
     };
 
-    // Also handle the loop boundary when the USER scrolls manually
     const onUserScroll = () => {
       const oneSetWidth = row.scrollWidth / 2;
       if (el.scrollLeft >= oneSetWidth) {
@@ -94,58 +80,26 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       el.removeEventListener("mouseleave", resume);
       el.removeEventListener("scroll", onUserScroll);
     };
-  }, [autoScrollSpeed, pillars.length]);
+  }, [autoScrollSpeed]);
 
   return (
     <section className={style.outer}>
       <div className={style.scroller} ref={scrollerRef}>
         <div className={style.row} ref={rowRef}>
-          {loopedPillars.map((p, i) => {
-            const widthRatio = p.widthRatio ?? 1;
-
-            // 3. Safely extract the image source whether it is a string or an object
-            const bgImgSrc =
-              typeof p.image === "string" ? p.image : p.image.src;
-            const logoSrc = p.logo
-              ? typeof p.logo === "string"
-                ? p.logo
-                : p.logo.src
-              : null;
-
-            return (
-              <article
-                key={i}
-                className={style.pillar}
-                // 4. Cleaner TypeScript casting for custom CSS variables
-                style={
-                  {
-                    height: `${(p.heightRatio ?? 1) * 100}%`,
-                    "--width-ratio": widthRatio,
-                  } as React.CSSProperties
-                }
-                aria-hidden={
-                  i >= pillars.length
-                } /* hide duplicates from a11y tree */
-              >
-                <div className={style.header}>
-                  {logoSrc && (
-                    <img
-                      src={logoSrc}
-                      alt={p.logoAlt ?? ""}
-                      className={style.logo}
-                    />
-                  )}
-                  {/* <span className={style.label}>{p.label}</span> */}
-                </div>
-                <img
-                  src={bgImgSrc}
-                  alt={p.imageAlt}
-                  className={style.bgImage}
-                  draggable={false}
-                />
-              </article>
-            );
-          })}
+          {/* Two copies of the image for seamless infinite scroll */}
+          <img
+            src={imgSrc}
+            alt={imageAlt}
+            className={style.image}
+            draggable={false}
+          />
+          <img
+            src={imgSrc}
+            alt=""
+            className={style.image}
+            draggable={false}
+            aria-hidden="true"
+          />
         </div>
       </div>
     </section>

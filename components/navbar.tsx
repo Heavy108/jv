@@ -7,7 +7,8 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import styles from "@/css/navbar.module.css";
 import Image from "next/image";
-import logo from "@/assets/logo.png"
+import logo from "@/assets/logo.png";
+
 // Interface for type safety
 interface MenuLink {
   path: string;
@@ -16,23 +17,22 @@ interface MenuLink {
 }
 
 const Navbar: React.FC = () => {
- const menuLinks: MenuLink[] = [
-   { path: "/", label: "Home" },
-   {
-     path: "#",
-     label: "Platforms",
-     // Example children added here!
-     children: [
-       { path: "#", label: "PowerEd" },
-       { path: "#", label: "PowerRx" },
-       { path: "#", label: "PowerPod" },
-       { path: "#", label: "Empower" },
-     ],
-   },
-   { path: "/about", label: "About" },
-  //  { path: "/contact", label: "Contact" },
-   //  { path: "/faq", label: "FAQ" },
- ];
+  const menuLinks: MenuLink[] = [
+    { path: "/", label: "Home" },
+    {
+      path: "#",
+      label: "Platforms",
+      children: [
+        { path: "#", label: "PowerEd" },
+        { path: "#", label: "PowerRx" },
+        { path: "#", label: "PowerPod" },
+        { path: "#", label: "Empower" },
+      ],
+    },
+    { path: "/about", label: "About" },
+    //  { path: "/contact", label: "Contact" },
+    //  { path: "/faq", label: "FAQ" },
+  ];
 
   const pathname = usePathname();
   const menuContainer = useRef<HTMLDivElement>(null);
@@ -51,21 +51,19 @@ const Navbar: React.FC = () => {
   const previousPathRef = useRef<string>(pathname);
 
   // Safely grab initial window width after hydration to prevent mismatches
-useEffect(() => {
-  // Pushing this to the macrotask queue silences the ESLint warning
-  // and prevents the synchronous cascading render.
-  const timer = setTimeout(() => {
-    setWindowWidth(window.innerWidth);
-  }, 0);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 0);
 
-  const handleResize = () => setWindowWidth(window.innerWidth);
-  window.addEventListener("resize", handleResize);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
 
-  return () => {
-    clearTimeout(timer);
-    window.removeEventListener("resize", handleResize);
-  };
-}, []);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleBodyScroll = (disableScroll: boolean) => {
     if (typeof window === "undefined") return;
@@ -121,7 +119,6 @@ useEffect(() => {
   // Handle GSAP Animation Initializations
   useGSAP(
     () => {
-      // Return early if width hasn't mounted
       if (windowWidth === 0) return;
 
       gsap.set(`.${styles.menuLinkItemHolder}`, { y: 125 });
@@ -218,17 +215,18 @@ useEffect(() => {
 
   return (
     <div className={styles.menuContainer} ref={menuContainer}>
-      <div className={styles.menuBar} ref={menuBarRef}>
+      <div
+        className={`${styles.menuBar} ${isMenuOpen ? styles.menuBarOpen : ""}`}
+        ref={menuBarRef}
+      >
         <div className={styles.menuBarContainer}>
           <div className={styles.menuLogo} onClick={closeMenu}>
             <Link href="/">
-              {/* <h4>Palmer</h4> */}
               <Image src={logo} width={200} height={16} alt="jv venture logo" />
             </Link>
           </div>
           <div className={styles.menuActions}>
             <div className={styles.menuToggle}>
-              {/* Added dynamic active class based on state */}
               <button
                 className={`${styles.hamburgerIcon} ${
                   isMenuOpen ? styles.active : ""
@@ -255,7 +253,6 @@ useEffect(() => {
                       {link.label}
                     </Link>
 
-                    {/* Render children conditionally if they exist */}
                     {link.children && (
                       <div className={styles.subMenu}>
                         {link.children.map((child, childIndex) => (
