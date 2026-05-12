@@ -1,18 +1,17 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import style from "@/css/StatCardShowcase.module.css";
+import { StaticImageData } from "next/image";
 
 export interface StatCard {
-  /** Image with logo + label burned in, OR pass logo/label separately below. */
-  image: string;
+  image: string | StaticImageData;
   imageAlt: string;
-  /** Big stat number, e.g. "19,000+" or "6.5 Mn+ SFT" */
+  // NEW: Added optional logo properties for the top-left badge
+  logo?: string | StaticImageData;
+  logoAlt?: string;
   statValue: string;
-  /** Optional unit shown smaller next to statValue, e.g. "Mn+ SFT" */
   statUnit?: string;
-  /** Descriptive line below the stat, e.g. "Students Empowered" */
   statLabel: string;
-  /** Relative width on desktop (flex-grow). */
   widthRatio?: number;
 }
 
@@ -43,6 +42,8 @@ const StatCardShowcase: React.FC<StatCardShowcaseProps> = ({
       if (!pausedRef.current && canScroll()) {
         const oneSetWidth = row.scrollWidth / 2;
         el.scrollLeft += autoScrollSpeed;
+
+        // Seamless loop reset
         if (el.scrollLeft >= oneSetWidth) {
           el.scrollLeft -= oneSetWidth;
         }
@@ -54,6 +55,7 @@ const StatCardShowcase: React.FC<StatCardShowcaseProps> = ({
     const pause = () => {
       pausedRef.current = true;
     };
+
     const resume = () => {
       setTimeout(() => {
         pausedRef.current = false;
@@ -88,30 +90,57 @@ const StatCardShowcase: React.FC<StatCardShowcaseProps> = ({
     <section className={style.outer}>
       <div className={style.scroller} ref={scrollerRef}>
         <div className={style.row} ref={rowRef}>
-          {loopedCards.map((c, i) => (
-            <article
-              key={i}
-              className={style.card}
-              style={{ ["--width-ratio" as any]: c.widthRatio ?? 1 }}
-              aria-hidden={i >= cards.length}
-            >
-              <img
-                src={c.image}
-                alt={c.imageAlt}
-                className={style.bgImage}
-                draggable={false}
-              />
-              <div className={style.statBlock}>
-                <div className={style.statValue}>
-                  {c.statValue}
-                  {c.statUnit && (
-                    <span className={style.statUnit}>{c.statUnit}</span>
-                  )}
+          {loopedCards.map((c, i) => {
+            const imgSrc = typeof c.image === "string" ? c.image : c.image.src;
+
+            // NEW: Safely extract the logo string URL
+            const logoSrc = c.logo
+              ? typeof c.logo === "string"
+                ? c.logo
+                : c.logo.src
+              : null;
+
+            return (
+              <article
+                key={i}
+                className={style.card}
+                style={
+                  { "--width-ratio": c.widthRatio ?? 1 } as React.CSSProperties
+                }
+                aria-hidden={i >= cards.length}
+              >
+                {/* Background Image */}
+                <img
+                  src={imgSrc}
+                  alt={c.imageAlt}
+                  className={style.bgImage}
+                  draggable={false}
+                />
+
+                {/* NEW: Logo Overlay */}
+                {logoSrc && (
+                  <div className={style.logoWrapper}>
+                    <img
+                      src={logoSrc}
+                      alt={c.logoAlt || "Stat card logo"}
+                      className={style.logo}
+                      draggable={false}
+                    />
+                  </div>
+                )}
+
+                <div className={style.statBlock}>
+                  <div className={style.statValue}>
+                    {c.statValue}
+                    {c.statUnit && (
+                      <span className={style.statUnit}>{c.statUnit}</span>
+                    )}
+                  </div>
+                  <div className={style.statLabel}>{c.statLabel}</div>
                 </div>
-                <div className={style.statLabel}>{c.statLabel}</div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

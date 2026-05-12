@@ -42,9 +42,9 @@ export default function Footer() {
             <li>
               <Link href="#">PowerX</Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="#">PowerCare</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 </div>
@@ -113,7 +113,7 @@ export default function Footer() {
               />
             </svg>
           </a>
-          <a href="#" aria-label="X (Twitter)" className={styles.socialIcon}>
+          {/* <a href="#" aria-label="X (Twitter)" className={styles.socialIcon}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="32"
@@ -135,7 +135,7 @@ export default function Footer() {
                 fill="white"
               />
             </svg>
-          </a>
+          </a> */}
         </div>
 
         {/* --- BOTTOM LEGAL --- */}

@@ -1,12 +1,14 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import style from "@/css/PillarShowcase.module.css";
+// 1. Import StaticImageData from Next.js
+import { StaticImageData } from "next/image";
 
 export interface Pillar {
-  logo?: string;
+  logo?: string | StaticImageData; // Allow StaticImageData for logos just in case
   logoAlt?: string;
   label: string;
-  image: string;
+  image: string | StaticImageData; // 2. Allow Next.js static imports
   imageAlt: string;
   heightRatio?: number;
   widthRatio?: number;
@@ -100,30 +102,43 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
         <div className={style.row} ref={rowRef}>
           {loopedPillars.map((p, i) => {
             const widthRatio = p.widthRatio ?? 1;
+
+            // 3. Safely extract the image source whether it is a string or an object
+            const bgImgSrc =
+              typeof p.image === "string" ? p.image : p.image.src;
+            const logoSrc = p.logo
+              ? typeof p.logo === "string"
+                ? p.logo
+                : p.logo.src
+              : null;
+
             return (
               <article
                 key={i}
                 className={style.pillar}
-                style={{
-                  height: `${(p.heightRatio ?? 1) * 100}%`,
-                  ["--width-ratio" as any]: widthRatio,
-                }}
+                // 4. Cleaner TypeScript casting for custom CSS variables
+                style={
+                  {
+                    height: `${(p.heightRatio ?? 1) * 100}%`,
+                    "--width-ratio": widthRatio,
+                  } as React.CSSProperties
+                }
                 aria-hidden={
                   i >= pillars.length
                 } /* hide duplicates from a11y tree */
               >
                 <div className={style.header}>
-                  {p.logo && (
+                  {logoSrc && (
                     <img
-                      src={p.logo}
+                      src={logoSrc}
                       alt={p.logoAlt ?? ""}
                       className={style.logo}
                     />
                   )}
-                  <span className={style.label}>{p.label}</span>
+                  {/* <span className={style.label}>{p.label}</span> */}
                 </div>
                 <img
-                  src={p.image}
+                  src={bgImgSrc}
                   alt={p.imageAlt}
                   className={style.bgImage}
                   draggable={false}

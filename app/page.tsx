@@ -1,48 +1,72 @@
-"use client"
+"use client";
 import style from "@/css/Home.module.css";
-import React from "react";
+import React, { useRef } from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import PillarShowcase from "@/components/pillar";
 import StatCardShowcase, { StatCard } from "@/components/StatCardShowcase";
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import { useRef } from "react";
+
+// GSAP Imports
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
+// Asset Imports - Stats
+import powered from "@/assets/powered.png";
+import powerrx from "@/assets/powerRx.png";
+import powerrx1 from "@/assets/powerrx1.png";
+import powerpod from "@/assets/powerpod.png";
+
+import poweredlogo from "@/assets/poweredlogo.png";
+import powerrxlogo from "@/assets/powerRxlogo.png";
+import powerrx1logo from "@/assets/powerrx1logo.png";
+import powerpodlogo from "@/assets/powerpodlogo.png";
+// Asset Imports - Gallery (c1 to c5)
+import c1 from "@/assets/c1.png";
+import c2 from "@/assets/c2.png";
+import c3 from "@/assets/c3.png";
+import c4 from "@/assets/c4.png";
+import c5 from "@/assets/c5.png";
+
+// Asset Imports - Pillars (Ecosystems)
+import ecosystem1 from "@/assets/ecosystem1.png";
+import ecosystem2 from "@/assets/Ecosystem Img 02.png";
+import ecosystem3 from "@/assets/Ecosystem3.png";
+import ecosystem4 from "@/assets/Ecosystem4.png";
+import ecosystem5 from "@/assets/Ecosystem5.png";
+
+import { StaticImageData } from "next/image";
+
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
 const stats: StatCard[] = [
   {
-    image:
-      "https://images.unsplash.com/photo-1583499871880-de841d1ace2a?w=900&auto=format&fit=crop&q=80",
-
+    image: powered,
+    logo:poweredlogo,
     imageAlt: "Students at PowerEd",
     statValue: "19,000+",
     statLabel: "Students Empowered",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1589648751789-c8ecb7a88bd5?w=900&auto=format&fit=crop&q=80",
-
+    image: powerrx,
+    logo:powerrxlogo,
     imageAlt: "PowerRx Lifesciences lab",
     statValue: "6.5",
     statUnit: "Mn+ SFT",
     statLabel: "of Labspace",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1619664208054-41eefeab29e9?w=900&auto=format&fit=crop&q=80",
-
+    image: powerrx1,
+    logo:powerrx1logo,
     imageAlt: "PowerRx Healthcare building",
     statValue: "2.4",
     statUnit: "Lakh+ SFT",
     statLabel: "Medical Office Building",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1571406761758-9a3eed5338ef?w=900&auto=format&fit=crop&q=80",
-
+    image: powerpod,
+    logo:powerpodlogo,
     imageAlt: "PowerPod managed living interior",
     statValue: "10.9",
     statUnit: "Lakh+ SFT",
@@ -54,225 +78,193 @@ export interface Pillar {
   logo?: string;
   logoAlt?: string;
   label: string;
-  image: string;
+  image: string | StaticImageData;
   imageAlt: string;
-  /** Relative height of the pillar (1 = tallest). */
   heightRatio?: number;
-  /** Relative width of the pillar (1 = standard). On desktop affects flex-grow. */
   widthRatio?: number;
 }
+
+// FIX: Added the missing "by" property and removed the hacky string casts
 const galleryData: GalleryItem[] = [
   {
-    common: "Lion",
-    binomial: "Panthera leo",
+    common: "Gallery Item 1",
+    stats: "XX",
+    binomial: "Students Empowered",
     photo: {
-      url: "https://images.unsplash.com/photo-1583499871880-de841d1ace2a?w=900&auto=format&fit=crop&q=80",
-      text: "lion couple kissing on a brown rock",
-      pos: "47% 35%",
-      by: "Clément Roy",
+      url: c1,
+      text: "abstract view of c1",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Asiatic elephant",
-    binomial: "Elephas maximus",
+    common: "Gallery Item 2",
+    stats: "XX",
+    binomial: "Ecosystems",
     photo: {
-      url: "https://images.unsplash.com/photo-1571406761758-9a3eed5338ef?w=900&auto=format&fit=crop&q=80",
-      text: "herd of Sri Lankan elephants walking away from a river",
-      pos: "75% 65%",
-      by: "Alex Azabache",
+      url: c2,
+      text: "abstract view of c2",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Red-tailed black cockatoo",
-    binomial: "Calyptorhynchus banksii",
+    common: "Gallery Item 3",
+    stats: "XX",
+    binomial: "Development",
     photo: {
-      url: "https://images.unsplash.com/photo-1619664208054-41eefeab29e9?w=900&auto=format&fit=crop&q=80",
-      text: "close-up of a black cockatoo",
-      pos: "53% 43%",
-      by: "David Clode",
+      url: c3,
+      text: "abstract view of c3",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Dromedary",
-    binomial: "Camelus dromedarius",
+    common: "Gallery Item 4",
+    stats: "XX",
+    binomial: "Growth",
     photo: {
-      url: "https://images.unsplash.com/photo-1662841238473-f4b137e123cb?w=900&auto=format&fit=crop&q=80",
-      text: "camel and her new born calf walking in the Sahara desert",
-      pos: "65% 65%",
-      by: "Moaz Tobok",
+      url: c4,
+      text: "abstract view of c4",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Polar bear",
-    binomial: "Ursus maritimus",
+    common: "Gallery Item 5",
+    stats: "XX",
+    binomial: "Synergy",
     photo: {
-      url: "https://images.unsplash.com/photo-1589648751789-c8ecb7a88bd5?w=900&auto=format&fit=crop&q=80",
-      text: "polar bear on the snow, by the water, raised on the hind legs, front paws together",
-      pos: "50% 25%",
-      by: "Hans-Jurgen Mager",
+      url: c5,
+      text: "abstract view of c5",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Giant panda",
-    binomial: "Ailuropoda melanoleuca",
+    common: "Gallery Item 6",
+    stats: "XX",
+    binomial: "Students Empowered",
     photo: {
-      url: "https://images.unsplash.com/photo-1659540181281-1d89d6112832?w=900&auto=format&fit=crop&q=80",
-      text: "giant panda hanging from a tree branch",
-      pos: "47%",
-      by: "Jiachen Lin",
+      url: c1,
+      text: "abstract view of c1",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Grévy's zebra",
-    binomial: "Equus grevyi",
+    common: "Gallery Item 7",
+    stats: "XX",
+    binomial: "Ecosystems",
     photo: {
-      url: "https://images.unsplash.com/photo-1526095179574-86e545346ae6?w=900&auto=format&fit=crop&q=80",
-      text: "zebra standing on wheat field, looking back towards the camera",
-      pos: "65% 35%",
-      by: "Jeff Griffith",
+      url: c2,
+      text: "abstract view of c2",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Cheetah",
-    binomial: "Acinonyx jubatus",
+    common: "Gallery Item 8",
+    stats: "XX",
+    binomial: "Development",
     photo: {
-      url: "https://images.unsplash.com/photo-1541707519942-08fd2f6480ba?w=900&auto=format&fit=crop&q=80",
-      text: "cheetah sitting in the grass under a blue sky",
-      by: "Mike Bird",
+      url: c3,
+      text: "abstract view of c3",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "King penguin",
-    binomial: "Aptenodytes patagonicus",
+    common: "Gallery Item 9",
+    stats: "XX",
+    binomial: "Growth",
     photo: {
-      url: "https://images.unsplash.com/photo-1595792419466-23cec2476fa6?w=900&auto=format&fit=crop&q=80",
-      text: "king penguin with a fluffy brown chick on grey rocks",
-      pos: "35%",
-      by: "Martin Wettstein",
+      url: c4,
+      text: "abstract view of c4",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
   {
-    common: "Red panda",
-    binomial: "Ailurus fulgens",
+    common: "Gallery Item 10",
+    stats: "XX",
+    binomial: "Synergy",
     photo: {
-      url: "https://images.unsplash.com/photo-1689799513565-44d2bc09d75b?w=900&auto=format&fit=crop&q=80",
-      text: "a red panda in a tree",
-      by: "Niels Baars",
-    },
-  },
-  {
-    common: "Grévy's zebra2",
-    binomial: "Equus grevyi",
-    photo: {
-      url: "https://images.unsplash.com/photo-1526095179574-86e545346ae6?w=900&auto=format&fit=crop&q=80",
-      text: "zebra standing on wheat field, looking back towards the camera",
-      pos: "65% 35%",
-      by: "Jeff Griffith",
-    },
-  },
-  {
-    common: "Cheetah2",
-    binomial: "Acinonyx jubatus",
-    photo: {
-      url: "https://images.unsplash.com/photo-1541707519942-08fd2f6480ba?w=900&auto=format&fit=crop&q=80",
-      text: "cheetah sitting in the grass under a blue sky",
-      by: "Mike Bird",
-    },
-  },
-  {
-    common: "King penguin2",
-    binomial: "Aptenodytes patagonicus",
-    photo: {
-      url: "https://images.unsplash.com/photo-1595792419466-23cec2476fa6?w=900&auto=format&fit=crop&q=80",
-      text: "king penguin with a fluffy brown chick on grey rocks",
-      pos: "35%",
-      by: "Martin Wettstein",
-    },
-  },
-  {
-    common: "Red panda2",
-    binomial: "Ailurus fulgens",
-    photo: {
-      url: "https://images.unsplash.com/photo-1689799513565-44d2bc09d75b?w=900&auto=format&fit=crop&q=80",
-      text: "a red panda in a tree",
-      by: "Niels Baars",
+      url: c5,
+      text: "abstract view of c5",
+      pos: "50% 50%",
+      by: "PowerRx", // <-- Added missing property
     },
   },
 ];
 
 const pillars: Pillar[] = [
   {
-    label: "Lion",
-    image:
-      "https://images.unsplash.com/photo-1583499871880-de841d1ace2a?w=900&auto=format&fit=crop&q=80",
-    imageAlt: "lion couple kissing on a brown rock",
+    label: "Ecosystem One",
+    image: ecosystem1,
+    imageAlt: "First ecosystem view",
     heightRatio: 0.7,
     widthRatio: 0.85,
   },
   {
-    label: "Asiatic elephant",
-    image:
-      "https://images.unsplash.com/photo-1571406761758-9a3eed5338ef?w=900&auto=format&fit=crop&q=80",
-    imageAlt: "herd of Sri Lankan elephants",
+    label: "Ecosystem Two",
+    image: ecosystem2,
+    imageAlt: "Second ecosystem view",
     heightRatio: 0.95,
     widthRatio: 1.1,
   },
   {
-    label: "Red-tailed cockatoo",
-    image:
-      "https://images.unsplash.com/photo-1619664208054-41eefeab29e9?w=900&auto=format&fit=crop&q=80",
-    imageAlt: "close-up of a black cockatoo",
+    label: "Ecosystem Three",
+    image: ecosystem3,
+    imageAlt: "Third ecosystem view",
     heightRatio: 0.85,
     widthRatio: 0.95,
   },
   {
-    label: "Dromedary",
-    image:
-      "https://images.unsplash.com/photo-1662841238473-f4b137e123cb?w=900&auto=format&fit=crop&q=80",
-    imageAlt: "camel and her new born calf",
+    label: "Ecosystem Four",
+    image: ecosystem4,
+    imageAlt: "Fourth ecosystem view",
     heightRatio: 1,
     widthRatio: 1.2,
   },
   {
-    label: "Polar bear",
-    image:
-      "https://images.unsplash.com/photo-1589648751789-c8ecb7a88bd5?w=900&auto=format&fit=crop&q=80",
-    imageAlt: "polar bear on the snow",
+    label: "Ecosystem Five",
+    image: ecosystem5,
+    imageAlt: "Fifth ecosystem view",
     heightRatio: 0.9,
     widthRatio: 0.9,
   },
 ];
+
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
- useGSAP(
-   () => {
-     const mm = gsap.matchMedia();
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
 
-     mm.add("(min-width: 1024px)", () => {
-       const sections = gsap.utils.toArray<HTMLElement>(
-         `.${style.outerContainer}`,
-       );
+      mm.add("(min-width: 1024px)", () => {
+        const sections = gsap.utils.toArray<HTMLElement>(
+          `.${style.outerContainer}`,
+        );
 
-       // CREATE ONLY ONE SCROLL TRIGGER FOR THE WHOLE WRAPPER
-       ScrollTrigger.create({
-         trigger: wrapperRef.current,
-         start: "top top",
-         end: "bottom bottom",
-         snap: {
-           // Divides the total scroll area by the number of transitions
-           snapTo: 1 / (sections.length - 1),
-           duration: { min: 0.3, max: 0.8 },
-           delay: 0.1,
-           ease: "power2.inOut",
-         },
-       });
-     });
+        ScrollTrigger.create({
+          trigger: wrapperRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          snap: {
+            snapTo: 1 / (sections.length - 1),
+            duration: { min: 0.3, max: 0.8 },
+            delay: 0.1,
+            ease: "power2.inOut",
+          },
+        });
+      });
 
-     return () => mm.revert();
-   },
-   { scope: wrapperRef },
- );
+      return () => mm.revert();
+    },
+    { scope: wrapperRef },
+  );
 
   return (
     <div ref={wrapperRef} className={style.wrapper}>
@@ -318,7 +310,21 @@ export default function Home() {
             <h1>
               <span>Reimagining</span> <span>Ecosystems</span>
             </h1>
-            <svg /* same */ />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="19"
+              viewBox="0 0 11 19"
+              fill="none"
+            >
+              <path
+                d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
           <p className={style.desc}>
             Economic corridors hold untapped potential often constrained by gaps
@@ -341,7 +347,21 @@ export default function Home() {
             <h1>
               <span>Reimagining</span> <span>Platforms</span>
             </h1>
-            <svg /* same */ />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="19"
+              viewBox="0 0 11 19"
+              fill="none"
+            >
+              <path
+                d="M1.5 1.5L9.5 9.5L1.5 17.5"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
           <p className={style.desc}>
             A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
