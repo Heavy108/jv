@@ -192,32 +192,8 @@ const galleryData: GalleryItem[] = [
     },
   },
 ];
-const footerRef = useRef<HTMLDivElement>(null);
-useEffect(() => {
-  const footerEl = footerRef.current;
-  if (!footerEl) return;
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        document.body.classList.add("footer-visible");
-      } else {
-        document.body.classList.remove("footer-visible");
-      }
-    },
-    {
-      // Trigger when at least 20% of the footer is in view
-      threshold: 0.2,
-    },
-  );
 
-  observer.observe(footerEl);
-
-  return () => {
-    observer.disconnect();
-    document.body.classList.remove("footer-visible");
-  };
-}, []);
 
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
