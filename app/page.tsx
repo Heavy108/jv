@@ -197,6 +197,34 @@ const galleryData: GalleryItem[] = [
 
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const footerEl = footerRef.current;
+    const scroller = wrapperRef.current;
+    if (!footerEl || !scroller) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          document.body.classList.add("hide-navbar");
+        } else {
+          document.body.classList.remove("hide-navbar");
+        }
+      },
+      {
+        root: scroller, // observe within the scroll container, not the viewport
+        threshold: 0.05, // fire as soon as footer starts entering
+      },
+    );
+
+    observer.observe(footerEl);
+
+    return () => {
+      observer.disconnect();
+      document.body.classList.remove("hide-navbar");
+    };
+  }, []);
 
   useGSAP(
     () => {
@@ -344,7 +372,7 @@ export default function Home() {
         </div>
       </section>
 
-      <div className={style.footerWrap}>
+      <div className={style.footerWrap} ref={footerRef}>
         <Footer />
       </div>
     </div>

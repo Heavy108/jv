@@ -107,9 +107,9 @@
     cursor: pointer;
 }
 .footerWrap {
-    scroll-snap-align: end; 
+    /* scroll-snap-align: end; 
      position: relative;
-    z-index: 100001;
+    z-index: 100001; */
     scroll-snap-align: end;
 }
 @media only screen and (min-width: 768px) {
@@ -140,6 +140,7 @@
 }
 
 @media only screen and (min-width: 1024px) {
+    
     .outerContainer {
         height: 100svh;          /* fixed height enables flex: 1 to work */
         min-height: 0;
