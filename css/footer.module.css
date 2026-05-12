@@ -1,0 +1,276 @@
+/* --- FOOTER CONTAINER --- */
+.footer {
+  background: #081732; /* Very dark green/black from design */
+  color: #ffffff;
+  font-family: Montserrat, sans-serif;
+  padding: 3rem 1.5rem;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- BRANDING --- */
+.brandSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.logoText {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.description {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #e0e0e0;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* --- HEADINGS & LINKS --- */
+.linkSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.heading {
+  color: rgba(255, 255, 255, 0.60);
+
+font-family: Montserrat;
+font-size: 1rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.linkList a {
+  color: #FFF;
+
+font-family: Montserrat;
+font-size: 1rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+  transition: color 0.2s ease;
+}
+
+.linkList a:hover {
+  color: #9ca3af;
+}
+
+/* --- PLATFORMS GRID --- */
+.platformGrid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns like the image */
+  gap: 1rem;
+  /* margin-top: 2rem; */
+}
+
+.platformGrid a {
+  color: #FFF;
+
+/* Desktop/Subtitles/Subtitle 3 */
+font-family: Montserrat;
+font-size: 1rem;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+  transition: color 0.2s ease;
+}
+
+.platformGrid a:hover {
+  color: #9ca3af;
+}
+
+/* --- CONTACT ICONS --- */
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.contactItem svg {
+  color: #888888; /* Grey icons */
+  flex-shrink: 0;
+}
+
+.contactItem a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contactItem a:hover {
+  color: #9ca3af;
+}
+
+/* --- SOCIAL BUTTONS --- */
+.socialSection {
+  display: flex;
+  gap: 0.75rem;
+  /* margin-top: -1rem;  */
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.08); /* Faint box around icons */
+  border-radius: 6px;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+}
+
+.socialIcon:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* --- BOTTOM LEGAL --- */
+.bottomSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.privacy {
+  color: rgba(255, 255, 255, 0.75);
+
+/* Mobile/Body/Body 2 */
+font-family: Montserrat;
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  transition: color 0.2s ease;
+}
+
+.privacy:hover {
+  color: #ffffff;
+}
+
+.copyright {
+  color: rgba(255, 255, 255, 0.75);
+
+/* Mobile/Body/Body 2 */
+font-family: Montserrat;
+font-size: 1rem;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.intro{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+@media only screen and (min-width:768px){
+.intro{
+    flex-direction: row;
+    gap: 3rem;
+}
+.description{
+    font-size: 1rem;
+}
+.container{
+    gap: 3rem;
+}
+.footer{
+    padding: 4rem 3rem;
+}
+.bottomSection{
+    margin-top: 3rem;
+}
+}
+/* --- DESKTOP LAYOUT --- */
+@media only screen and (min-width: 1024px) {
+  .container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .brandSection {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+  }
+
+  .socialSection {
+    margin-top: 0;
+  }
+
+  .bottomSection {
+    width: 100%; 
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    margin-top: 0;
+  }
+.social {
+    position: relative; 
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between; 
+    padding-top: 2rem; 
+  }
+  .socialSection {
+    margin-top: 0;
+  }
+
+  .bottomSection {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    margin-top: 0;
+    width: auto;
+  }
+
+  .copyright {
+    position: absolute; 
+    left: 50%;
+    transform: translateX(-50%); 
+    margin: 0;
+    white-space: nowrap; 
+  }
+
+  .privacy {
+    margin: 0;
+  }
+}

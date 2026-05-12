@@ -2,6 +2,46 @@ import style from "@/css/Home.module.css";
 import React from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import PillarShowcase from "@/components/pillar";
+import StatCardShowcase, { StatCard } from "@/components/StatCardShowcase";
+import Footer from "@/components/footer";
+
+const stats: StatCard[] = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1583499871880-de841d1ace2a?w=900&auto=format&fit=crop&q=80",
+
+    imageAlt: "Students at PowerEd",
+    statValue: "19,000+",
+    statLabel: "Students Empowered",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1589648751789-c8ecb7a88bd5?w=900&auto=format&fit=crop&q=80",
+
+    imageAlt: "PowerRx Lifesciences lab",
+    statValue: "6.5",
+    statUnit: "Mn+ SFT",
+    statLabel: "of Labspace",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1619664208054-41eefeab29e9?w=900&auto=format&fit=crop&q=80",
+
+    imageAlt: "PowerRx Healthcare building",
+    statValue: "2.4",
+    statUnit: "Lakh+ SFT",
+    statLabel: "Medical Office Building",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1571406761758-9a3eed5338ef?w=900&auto=format&fit=crop&q=80",
+
+    imageAlt: "PowerPod managed living interior",
+    statValue: "10.9",
+    statUnit: "Lakh+ SFT",
+    statLabel: "Planned Development",
+  },
+];
 
 export interface Pillar {
   logo?: string;
@@ -307,9 +347,10 @@ export default function Home() {
 
         <div className={style.galleryWrap}>
           {/* <CircularGallery items={galleryData} /> */}
-          <PillarShowcase pillars={pillars} autoScrollSpeed={0.6} />
+          <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
         </div>
       </section>
+      <Footer/>
     </>
   );
 }
