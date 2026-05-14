@@ -1,24 +1,33 @@
 /* ─────────────────────────────────────────────
    MOBILE / TABLET  (< 1024px)
    Normal vertical document scroll. No snapping.
+   Using svh so URL bar show/hide doesn't resize sections.
    ───────────────────────────────────────────── */
 .wrapper {
     width: 100%;
+    overflow-x: hidden; /* hard stop against any horizontal overflow leaking to body */
 }
 
 .outerContainer {
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
-    min-height: 100dvh;
+    min-height: 100vh;       /* fallback for browsers without svh */
+    min-height: 100svh;      /* stays constant — no jump when URL bar hides */
     padding: 5.5rem 0rem 0rem 0rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    overflow-y: visible;
 }
 
 .extrapad {
     padding: 0rem 1.5rem;
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .container {
@@ -32,10 +41,12 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .galleryWrap {
     width: 100%;
+    max-width: 100%;
     height: 380px;
     margin-top: 1rem;
     display: flex;
@@ -43,6 +54,8 @@
     justify-content: center;
     position: relative;
     padding: 0rem;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .title h1 {
@@ -109,12 +122,15 @@
 /* On mobile/tablet the horizontal track is a no-op — sections just stack */
 .horizontalWrap {
     width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 .horizontalTrack {
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
 }
 
 .footerWrap {
@@ -155,25 +171,26 @@
    ───────────────────────────────────────────── */
 @media only screen and (min-width: 1024px) {
     .wrapper {
-        overflow-x: hidden; /* prevents the horizontal overflow from leaking */
+        overflow-x: hidden;
     }
 
     /* The pinned viewport — exactly one screen tall */
     .horizontalWrap {
         position: relative;
+        height: 100vh;
         height: 100svh;
         width: 100%;
+        max-width: none;
         overflow: hidden;
     }
 
-    /* The track that GSAP will translate horizontally.
-       Width = number of sections × 100vw is set inline by JS,
-       but we declare flex-row layout here. */
+    /* The track that GSAP will translate horizontally */
     .horizontalTrack {
         display: flex;
         flex-direction: row;
         height: 100%;
         width: max-content;
+        max-width: none;
         will-change: transform;
     }
 
@@ -181,9 +198,12 @@
     .outerContainer {
         flex: 0 0 100vw;
         width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
         height: 100svh;
         min-height: 0;
         padding: 5.5rem 0 0 0;
+        overflow: hidden;
     }
 
     .title {
@@ -198,6 +218,7 @@
         min-height: 0;
         align-items: stretch;
         margin-top: 1.5rem;
+        overflow: hidden;
     }
 }
 

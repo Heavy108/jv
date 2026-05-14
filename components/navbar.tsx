@@ -30,8 +30,6 @@ const Navbar: React.FC = () => {
       ],
     },
     { path: "/about", label: "About" },
-    //  { path: "/contact", label: "Contact" },
-    //  { path: "/faq", label: "FAQ" },
   ];
 
   const pathname = usePathname();
@@ -49,6 +47,9 @@ const Navbar: React.FC = () => {
   const lastScrollY = useRef<number>(0);
   const scrollPositionRef = useRef<number>(0);
   const previousPathRef = useRef<string>(pathname);
+
+  // Tracks which lock mode we used to open — so close uses the matching unlock
+  const lockModeRef = useRef<"fixed" | "overflow" | null>(null);
 
   // Safely grab initial window width after hydration to prevent mismatches
   useEffect(() => {
@@ -69,17 +70,36 @@ const Navbar: React.FC = () => {
     if (typeof window === "undefined") return;
 
     if (disableScroll) {
-      scrollPositionRef.current = window.pageYOffset;
-      document.body.style.overflow = "hidden";
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollPositionRef.current}px`;
-      document.body.style.width = "100%";
+      // If we're inside the horizontal pin (desktop), DO NOT use position:fixed.
+      // That would change window.scrollY and break the GSAP horizontal trigger,
+      // making the slide jump. A simple overflow:hidden is enough — the pin
+      // already prevents scrolling away while we're in it.
+      const insideHorizontalPin =
+        document.body.classList.contains("lock-navbar");
+
+      if (insideHorizontalPin) {
+        lockModeRef.current = "overflow";
+        document.body.style.overflow = "hidden";
+      } else {
+        lockModeRef.current = "fixed";
+        scrollPositionRef.current = window.pageYOffset;
+        document.body.style.overflow = "hidden";
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollPositionRef.current}px`;
+        document.body.style.width = "100%";
+      }
     } else {
-      document.body.style.removeProperty("overflow");
-      document.body.style.removeProperty("position");
-      document.body.style.removeProperty("top");
-      document.body.style.removeProperty("width");
-      window.scrollTo(0, scrollPositionRef.current);
+      // Undo whichever lock we set up
+      if (lockModeRef.current === "fixed") {
+        document.body.style.removeProperty("overflow");
+        document.body.style.removeProperty("position");
+        document.body.style.removeProperty("top");
+        document.body.style.removeProperty("width");
+        window.scrollTo(0, scrollPositionRef.current);
+      } else if (lockModeRef.current === "overflow") {
+        document.body.style.removeProperty("overflow");
+      }
+      lockModeRef.current = null;
     }
   };
 
@@ -179,9 +199,8 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       if (isMenuOpen) return;
 
-      // When the page tells us we're inside the pinned horizontal block
-      // (desktop only), keep the navbar fully visible and ignore vertical
-      // scroll deltas — they're just driving the horizontal animation.
+      // When inside the pinned horizontal block (desktop), keep navbar visible
+      // and ignore vertical scroll deltas — they're driving the X animation.
       if (document.body.classList.contains("lock-navbar")) {
         gsap.to(`.${styles.menuBar}`, {
           y: 0,
@@ -221,7 +240,7 @@ const Navbar: React.FC = () => {
   // Cleanup body scroll lock on unmount
   useEffect(() => {
     return () => {
-      if (document.body.style.position === "fixed") {
+      if (lockModeRef.current) {
         toggleBodyScroll(false);
       }
     };

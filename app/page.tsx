@@ -294,7 +294,7 @@ export default function Home() {
 
   return (
     <div ref={wrapperRef} className={style.wrapper}>
-      {/* <Navbar /> */}
+      <Navbar />
 
       {/* Horizontal-scroll block (desktop) / vertical stack (mobile) */}
       <div ref={horizontalWrapRef} className={style.horizontalWrap}>
