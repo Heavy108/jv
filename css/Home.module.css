@@ -160,6 +160,7 @@
         height: 3rem;
     }
     .galleryWrap {
+        padding: 0rem 3rem;
         height: 480px;
     }
 }
@@ -235,5 +236,9 @@
     .desc {
         font-size: 1.25rem;
         margin: 0.5rem 0 2rem 0;
+    }
+    .galleryWrap{
+        padding: 0rem 5rem;
+
     }
 }
