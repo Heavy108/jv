@@ -1,43 +1,42 @@
-/* NEW: The scroll container that enforces the snapping */
+/* ─────────────────────────────────────────────
+   MOBILE / TABLET  (< 1024px)
+   Normal vertical document scroll. No snapping.
+   ───────────────────────────────────────────── */
 .wrapper {
-    height: 100vh;
-    height: 100dvh; /* fallback for mobile browsers */
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
+    width: 100%;
 }
 
 .outerContainer {
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
-    /* Changed to exact height to ensure perfect snapping */
-    height: 100dvh; 
+    min-height: 100dvh;
     padding: 5.5rem 0rem 0rem 0rem;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    
-    /* NEW: Forces the scroll to snap to the top of this container and stops momentum to prevent skipping */
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+    align-items: center;
+    justify-content: center;
 }
-.extrapad{
-    padding:0rem 1.5rem
+
+.extrapad {
+    padding: 0rem 1.5rem;
+    width: 100%;
 }
+
 .container {
     padding: 1rem;
     color: white;
     border-radius: 1rem;
-    border: 1px solid #9BBBF1;
-    background: rgba(217, 217, 217, 0.20);
-    box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
-    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;        /* center horizontally */
+    margin: 0 auto;
 }
 
 .galleryWrap {
     width: 100%;
-    height: 380px;          /* mobile: fixed height */
+    height: 380px;
     margin-top: 1rem;
     display: flex;
     align-items: center;
@@ -64,7 +63,7 @@
 
 .title svg {
     width: 2rem;
-    height: 2rem;  
+    height: 2rem;
 }
 
 .title span:last-child {
@@ -77,13 +76,13 @@
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
-    line-height: 1.25rem; 
+    line-height: 1.25rem;
     letter-spacing: 0.035rem;
     margin: 0.5rem 0 1rem 0;
 }
 
 .desc span {
-   font-weight: 600;
+    font-weight: 600;
 }
 
 .button {
@@ -106,14 +105,24 @@
     text-transform: uppercase;
     cursor: pointer;
 }
-.footerWrap {
-    /* scroll-snap-align: end; 
-     position: relative;
-    z-index: 100001; */
-    scroll-snap-align: end;
+
+/* On mobile/tablet the horizontal track is a no-op — sections just stack */
+.horizontalWrap {
+    width: 100%;
 }
+
+.horizontalTrack {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.footerWrap {
+    width: 100%;
+}
+
 @media only screen and (min-width: 768px) {
-    .extrapad{
+    .extrapad {
         padding: 0rem 3rem;
     }
     .outerContainer {
@@ -139,12 +148,44 @@
     }
 }
 
+/* ─────────────────────────────────────────────
+   DESKTOP  (≥ 1024px)
+   Horizontal scroll: GSAP pins .horizontalWrap
+   and translates .horizontalTrack on X.
+   ───────────────────────────────────────────── */
 @media only screen and (min-width: 1024px) {
-    
-    .outerContainer {
-        height: 100svh;          /* fixed height enables flex: 1 to work */
-        min-height: 0;
+    .wrapper {
+        overflow-x: hidden; /* prevents the horizontal overflow from leaking */
     }
+
+    /* The pinned viewport — exactly one screen tall */
+    .horizontalWrap {
+        position: relative;
+        height: 100svh;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* The track that GSAP will translate horizontally.
+       Width = number of sections × 100vw is set inline by JS,
+       but we declare flex-row layout here. */
+    .horizontalTrack {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: max-content;
+        will-change: transform;
+    }
+
+    /* Each section fills exactly one viewport */
+    .outerContainer {
+        flex: 0 0 100vw;
+        width: 100vw;
+        height: 100svh;
+        min-height: 0;
+        padding: 5.5rem 0 0 0;
+    }
+
     .title {
         align-items: center;
     }

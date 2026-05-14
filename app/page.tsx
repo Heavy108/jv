@@ -1,6 +1,6 @@
 "use client";
 import style from "@/css/Home.module.css";
-import React, { useRef , useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import PillarShowcase from "@/components/pillar";
 import StatCardShowcase, { StatCard } from "@/components/StatCardShowcase";
@@ -22,6 +22,7 @@ import poweredlogo from "@/assets/poweredlogo.png";
 import powerrxlogo from "@/assets/powerRxlogo.png";
 import powerrx1logo from "@/assets/powerrx1logo.png";
 import powerpodlogo from "@/assets/powerpodlogo.png";
+
 // Asset Imports - Gallery (c1 to c5)
 import c1 from "@/assets/c1.png";
 import c2 from "@/assets/c2.png";
@@ -29,8 +30,7 @@ import c3 from "@/assets/c3.png";
 import c4 from "@/assets/c4.png";
 import c5 from "@/assets/c5.png";
 
-
-import skylineImg from "@/assets/Eco.png"
+import skylineImg from "@/assets/Eco.png";
 import { StaticImageData } from "next/image";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -38,14 +38,14 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const stats: StatCard[] = [
   {
     image: powered,
-    logo:poweredlogo,
+    logo: poweredlogo,
     imageAlt: "Students at PowerEd",
     statValue: "19,000+",
     statLabel: "Students Empowered",
   },
   {
     image: powerrx,
-    logo:powerrxlogo,
+    logo: powerrxlogo,
     imageAlt: "PowerRx Lifesciences lab",
     statValue: "6.5",
     statUnit: "Mn+ SFT",
@@ -53,7 +53,7 @@ const stats: StatCard[] = [
   },
   {
     image: powerrx1,
-    logo:powerrx1logo,
+    logo: powerrx1logo,
     imageAlt: "PowerRx Healthcare building",
     statValue: "2.4",
     statUnit: "Lakh+ SFT",
@@ -61,7 +61,7 @@ const stats: StatCard[] = [
   },
   {
     image: powerpod,
-    logo:powerpodlogo,
+    logo: powerpodlogo,
     imageAlt: "PowerPod managed living interior",
     statValue: "10.9",
     statUnit: "Lakh+ SFT",
@@ -79,7 +79,6 @@ export interface Pillar {
   widthRatio?: number;
 }
 
-// FIX: Added the missing "by" property and removed the hacky string casts
 const galleryData: GalleryItem[] = [
   {
     common: "Gallery Item 1",
@@ -89,7 +88,7 @@ const galleryData: GalleryItem[] = [
       url: c1,
       text: "abstract view of c1",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -100,7 +99,7 @@ const galleryData: GalleryItem[] = [
       url: c2,
       text: "abstract view of c2",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -111,7 +110,7 @@ const galleryData: GalleryItem[] = [
       url: c3,
       text: "abstract view of c3",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -122,7 +121,7 @@ const galleryData: GalleryItem[] = [
       url: c4,
       text: "abstract view of c4",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -133,7 +132,7 @@ const galleryData: GalleryItem[] = [
       url: c5,
       text: "abstract view of c5",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -144,7 +143,7 @@ const galleryData: GalleryItem[] = [
       url: c1,
       text: "abstract view of c1",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -155,7 +154,7 @@ const galleryData: GalleryItem[] = [
       url: c2,
       text: "abstract view of c2",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -166,7 +165,7 @@ const galleryData: GalleryItem[] = [
       url: c3,
       text: "abstract view of c3",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -177,7 +176,7 @@ const galleryData: GalleryItem[] = [
       url: c4,
       text: "abstract view of c4",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
   {
@@ -188,21 +187,21 @@ const galleryData: GalleryItem[] = [
       url: c5,
       text: "abstract view of c5",
       pos: "50% 50%",
-      by: "PowerRx", // <-- Added missing property
+      by: "PowerRx",
     },
   },
 ];
 
-
-
 export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const horizontalWrapRef = useRef<HTMLDivElement>(null);
+  const horizontalTrackRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
+  // Hide navbar when footer is in view (normal viewport-based observation now)
   useEffect(() => {
     const footerEl = footerRef.current;
-    const scroller = wrapperRef.current;
-    if (!footerEl || !scroller) return;
+    if (!footerEl) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -212,10 +211,7 @@ export default function Home() {
           document.body.classList.remove("hide-navbar");
         }
       },
-      {
-        root: scroller, // observe within the scroll container, not the viewport
-        threshold: 0.05, // fire as soon as footer starts entering
-      },
+      { threshold: 0.05 },
     );
 
     observer.observe(footerEl);
@@ -226,26 +222,53 @@ export default function Home() {
     };
   }, []);
 
+  // Horizontal scroll setup — DESKTOP ONLY
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
       mm.add("(min-width: 1024px)", () => {
+        const track = horizontalTrackRef.current;
+        const wrap = horizontalWrapRef.current;
+        if (!track || !wrap) return;
+
         const sections = gsap.utils.toArray<HTMLElement>(
           `.${style.outerContainer}`,
         );
+        if (sections.length === 0) return;
+
+        // Distance to scroll = total track width minus one viewport
+        const getDistance = () => track.scrollWidth - window.innerWidth;
+
+        const tween = gsap.to(track, {
+          x: () => -getDistance(),
+          ease: "none",
+        });
 
         ScrollTrigger.create({
-          trigger: wrapperRef.current,
+          trigger: wrap,
           start: "top top",
-          end: "bottom bottom",
+          end: () => `+=${getDistance()}`,
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          animation: tween,
           snap: {
             snapTo: 1 / (sections.length - 1),
-            duration: { min: 0.3, max: 0.8 },
-            delay: 0.1,
+            duration: { min: 0.2, max: 0.6 },
+            delay: 0.05,
             ease: "power2.inOut",
           },
         });
+
+        // Recalculate on resize
+        const onResize = () => ScrollTrigger.refresh();
+        window.addEventListener("resize", onResize);
+
+        return () => {
+          window.removeEventListener("resize", onResize);
+        };
       });
 
       return () => mm.revert();
@@ -257,120 +280,82 @@ export default function Home() {
     <div ref={wrapperRef} className={style.wrapper}>
       <Navbar />
 
-      <section className={style.outerContainer}>
-        <div className={style.extrapad}>
-          <div className={style.container}>
-            <div className={style.title}>
-              <h1>
-                <span>Reimagining</span> <span>Investing</span>
-              </h1>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="11"
-                height="19"
-                viewBox="0 0 11 19"
-                fill="none"
-              >
-                <path
-                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                  stroke="white"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+      {/* Horizontal-scroll block (desktop) / vertical stack (mobile) */}
+      <div ref={horizontalWrapRef} className={style.horizontalWrap}>
+        <div ref={horizontalTrackRef} className={style.horizontalTrack}>
+          <section className={style.outerContainer}>
+            <div className={style.extrapad}>
+              <div className={style.container}>
+                <div className={style.title}>
+                  <h1>
+                    <span>Reimagining</span> <span>Investing</span>
+                  </h1>
+                </div>
+                <p className={style.desc}>
+                  Traditional investing measures profit; we measures impact
+                  through
+                  <span> Sphere of Influence (SOI)</span>, where capital shapes
+                  societal outcomes.
+                </p>
+                <button className={style.button}>ABOUT US</button>
+              </div>
             </div>
-            <p className={style.desc}>
-              Traditional investing measures profit; we measures impact through
-              <span> Sphere of Influence (SOI)</span>, where capital shapes
-              societal outcomes.
-            </p>
-            <button className={style.button}>ABOUT US</button>
-          </div>
-        </div>
-        <div className={style.galleryWrap}>
-          <CircularGallery items={galleryData} />
-        </div>
-      </section>
+            <div className={style.galleryWrap}>
+              <CircularGallery items={galleryData} />
+            </div>
+          </section>
 
-      <section className={style.outerContainer}>
-        <div className={style.extrapad}>
-          <div className={style.container}>
-            <div className={style.title}>
-              <h1>
-                <span>Reimagining</span> <span>Ecosystems</span>
-              </h1>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="11"
-                height="19"
-                viewBox="0 0 11 19"
-                fill="none"
-              >
-                <path
-                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                  stroke="white"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+          <section className={style.outerContainer}>
+            <div className={style.extrapad}>
+              <div className={style.container}>
+                <div className={style.title}>
+                  <h1>
+                    <span>Reimagining</span> <span>Ecosystems</span>
+                  </h1>
+                </div>
+                <p className={style.desc}>
+                  Economic corridors hold untapped potential often constrained
+                  by gaps in social infrastructure. These white spaces are
+                  identified and transformed into{" "}
+                  <span> GRID (Growth-Ready Innovation Destinations) </span>
+                  integrating platforms that combine high-quality real assets
+                  with enabling services to create cohesive, high-performance
+                  ecosystems.
+                </p>
+                <button className={style.button}>EXPLORE GRID</button>
+              </div>
             </div>
-            <p className={style.desc}>
-              Economic corridors hold untapped potential often constrained by
-              gaps in social infrastructure. These white spaces are identified
-              and transformed into{" "}
-              <span> GRID (Growth-Ready Innovation Destinations) </span>
-              integrating platforms that combine high-quality real assets with
-              enabling services to create cohesive, high-performance ecosystems.
-            </p>
-            <button className={style.button}>EXPLORE GRID</button>
-          </div>
-        </div>
-        <div className={style.galleryWrap}>
-          <PillarShowcase image={skylineImg} imageAlt="Ecosystem" />
-        </div>
-      </section>
+            <div className={style.galleryWrap}>
+              <PillarShowcase image={skylineImg} imageAlt="Ecosystem" />
+            </div>
+          </section>
 
-      <section className={style.outerContainer}>
-        <div className={style.extrapad}>
-          <div className={style.container}>
-            <div className={style.title}>
-              <h1>
-                <span>Reimagining</span> <span>Platforms</span>
-              </h1>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="11"
-                height="19"
-                viewBox="0 0 11 19"
-                fill="none"
-              >
-                <path
-                  d="M1.5 1.5L9.5 9.5L1.5 17.5"
-                  stroke="white"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+          <section className={style.outerContainer}>
+            <div className={style.extrapad}>
+              <div className={style.container}>
+                <div className={style.title}>
+                  <h1>
+                    <span>Reimagining</span> <span>Platforms</span>
+                  </h1>
+                </div>
+                <p className={style.desc}>
+                  A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
+                  Healthcare, and Hospitality built on the belief that assets
+                  are catalysts for societal transformation, not standalone
+                  plays. Unified into three platforms{" "}
+                  <span> PowerX, PowerEd, and PowerPod </span>
+                  these systems are designed to interconnect, unlock synergies,
+                  and amplify impact beyond sectors.
+                </p>
+                <button className={style.button}>ABOUT US</button>
+              </div>
             </div>
-            <p className={style.desc}>
-              A 10 year legacy, $550 Mn AUM across Lifesciences, Education,
-              Healthcare, and Hospitality built on the belief that assets are
-              catalysts for societal transformation, not standalone plays.
-              Unified into three platforms{" "}
-              <span> PowerX, PowerEd, and PowerPod </span>
-              these systems are designed to interconnect, unlock synergies, and
-              amplify impact beyond sectors.
-            </p>
-            <button className={style.button}>ABOUT US</button>
-          </div>
+            <div className={style.galleryWrap}>
+              <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
+            </div>
+          </section>
         </div>
-        <div className={style.galleryWrap}>
-          <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
-        </div>
-      </section>
+      </div>
 
       <div className={style.footerWrap} ref={footerRef}>
         <Footer />

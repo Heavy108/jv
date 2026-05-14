@@ -15,9 +15,9 @@
   position: fixed;
   top: 0;
   width: calc(100% );
-  max-width: 1220px;
+  max-width: 1200px;
   height: 64px;
-  margin: 0.75rem;
+  margin-top: 0.75rem;
 
   display: flex;
   justify-content: space-between;
@@ -142,7 +142,7 @@
   margin-left: auto;
   margin-right: auto;
   width: calc(100% );
-  max-width: 1220px;
+  max-width: 1200px;
   height: calc(100svh - 4em);
   background: transparent;
   border-radius: 1rem;
