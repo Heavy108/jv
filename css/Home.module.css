@@ -13,6 +13,7 @@
     min-height: 100vh;       /* fallback for browsers without svh */
     min-height: 100svh;      /* stays constant — no jump when URL bar hides */
     padding: 0;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -47,10 +48,13 @@
     padding: 1rem;
     color: white;
     border-radius: 1rem;
-    display: flex;
+     border: 1px solid #9BBBF1;
+    background: rgba(217, 217, 217, 0.20);
+    box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
+    /* display: flex; */
     flex-direction: column;
-    text-align: center;
-    align-items: center;
+    /* text-align: center;
+    align-items: center; */
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
