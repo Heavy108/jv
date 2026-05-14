@@ -374,7 +374,7 @@ export default function Home() {
                 <button className={style.button}>ABOUT US</button>
               </div>
             </div>
-            <div className={style.galleryWrap}>
+            <div className={`${style.galleryWrap} ${style.gal}`}>
               <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
             </div>
           </section>

@@ -221,6 +221,9 @@
         margin-top: 1.5rem;
         overflow: hidden;
     }
+    .gal{
+        /* padding-bottom: 3rem; */
+    }
 }
 
 @media only screen and (min-width: 1440px) {
@@ -240,5 +243,8 @@
     .galleryWrap{
         padding: 0rem 5rem;
 
+    }
+     .gal{
+        /* padding-bottom: 5rem; */
     }
 }
