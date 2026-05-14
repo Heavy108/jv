@@ -17,7 +17,10 @@
   width: calc(100% - 4em);
   height: 64px;
   margin-top: 0.75rem;
-
+  border-radius: 1rem;
+border: 1px solid rgba(255, 255, 255, 0.50);
+ background: rgba(0, 0, 0, 0.25);
+backdrop-filter: blur(16px);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -258,6 +261,10 @@
   }
 
   .menuBar {
+      border-radius: 1rem;
+border: 1px dotted rgba(255, 255, 255, 0.50);
+ background: rgba(0, 0, 0, 0.25);
+backdrop-filter: blur(16px);
     margin: 0.75rem;
     width: calc(100% - 2.5em);
   }

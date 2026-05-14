@@ -196,6 +196,11 @@ const Navbar: React.FC = () => {
 
   // Handle scroll to hide/show menu bar
   useEffect(() => {
+    // Minimum scroll delta before we consider it intentional. Snap
+    // animations and ScrollTrigger refresh can nudge scrollY by a few px;
+    // those should not trigger a hide.
+    const MIN_DELTA = 8;
+
     const handleScroll = () => {
       if (isMenuOpen) return;
 
@@ -213,8 +218,14 @@ const Navbar: React.FC = () => {
       }
 
       const currentScrollY = window.scrollY;
+      const delta = currentScrollY - lastScrollY.current;
 
-      if (currentScrollY > lastScrollY.current) {
+      // Ignore micro-scrolls (likely from snap/refresh, not the user)
+      if (Math.abs(delta) < MIN_DELTA) {
+        return;
+      }
+
+      if (delta > 0) {
         gsap.to(`.${styles.menuBar}`, {
           y: -200,
           duration: 1,
@@ -235,6 +246,40 @@ const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+  }, [isMenuOpen]);
+
+  // Watch for the `lock-navbar` body class so we react INSTANTLY when the
+  // horizontal pin starts/ends — without waiting for the next scroll event.
+  // Fixes the case where a previously-fired "hide" tween (y: -200) was still
+  // mid-flight when the pin activated, causing the navbar to fly up between
+  // slides 2 and 3.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const syncToLockState = () => {
+      if (isMenuOpen) return;
+      if (document.body.classList.contains("lock-navbar")) {
+        // Snap to visible and kill any in-flight hide tween
+        gsap.to(`.${styles.menuBar}`, {
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        lastScrollY.current = window.scrollY;
+      }
+    };
+
+    // Run once on mount in case the class is already there (page reload mid-pin)
+    syncToLockState();
+
+    const mo = new MutationObserver(syncToLockState);
+    mo.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => mo.disconnect();
   }, [isMenuOpen]);
 
   // Cleanup body scroll lock on unmount

@@ -196,29 +196,15 @@ export default function Home() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const horizontalWrapRef = useRef<HTMLDivElement>(null);
   const horizontalTrackRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
 
-  // Hide navbar when footer is in view (normal viewport-based observation now)
+  // Permanently keep the navbar visible on this page.
+  // Adds `lock-navbar` on mount, removes on unmount. The navbar already
+  // respects this class by forcing y: 0 and ignoring scroll-direction logic.
   useEffect(() => {
-    const footerEl = footerRef.current;
-    if (!footerEl) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          document.body.classList.add("hide-navbar");
-        } else {
-          document.body.classList.remove("hide-navbar");
-        }
-      },
-      { threshold: 0.05 },
-    );
-
-    observer.observe(footerEl);
-
+    document.body.classList.add("lock-navbar");
+    document.body.classList.remove("hide-navbar");
     return () => {
-      observer.disconnect();
-      document.body.classList.remove("hide-navbar");
+      document.body.classList.remove("lock-navbar");
     };
   }, []);
 
@@ -245,45 +231,40 @@ export default function Home() {
           ease: "none",
         });
 
-        const trigger = ScrollTrigger.create({
+        // Explicit snap points: one for each section.
+        // For 3 sections: [0, 0.5, 1]
+        const snapPoints = sections.map((_, i) => i / (sections.length - 1));
+
+        ScrollTrigger.create({
           trigger: wrap,
           start: "top top",
           end: () => `+=${getDistance()}`,
           pin: true,
-          // Tighter scrub = less lag between wheel input and horizontal motion.
-          // Lower number feels more direct; higher feels floaty.
-          scrub: 0.5,
+          // Tighter scrub feels more direct and reduces the time the
+          // scrub and snap can fight each other.
+          scrub: 0.3,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           animation: tween,
-          // Snap to the nearest slide once the user stops scrolling.
-          // - `duration` is short and tight so the snap feels like an
-          //   assist, not a takeover.
-          // - `delay` waits for the user to actually pause before snapping,
-          //   so a slow manual scroll isn't fought against.
-          // - `power3.out` decelerates smoothly into the target.
           snap: {
-            snapTo: 1 / (sections.length - 1),
-            duration: { min: 0.25, max: 0.5 },
-            delay: 0.12,
-            ease: "power3.out",
-          },
-          // Lock the navbar in place while we're inside the horizontal block —
-          // the vertical scroll deltas here are driving the X animation, not
-          // a real "scroll down" gesture.
-          onToggle: (self) => {
-            if (self.isActive) {
-              document.body.classList.add("lock-navbar");
-            } else {
-              document.body.classList.remove("lock-navbar");
-            }
+            // Pass explicit array of snap points so behavior is predictable.
+            snapTo: snapPoints,
+            // `directional: true` means: only snap to the next point in the
+            // direction the user was scrolling. Prevents flicking past slide
+            // 2 and landing on slide 3 — at worst you land on slide 2.
+            directional: true,
+            // Short, consistent settle. min/max kept close together so the
+            // animation feels uniform regardless of distance.
+            duration: { min: 0.3, max: 0.5 },
+            // Small delay so the snap waits until the user has actually
+            // stopped scrolling, but short enough that it doesn't feel laggy.
+            delay: 0.1,
+            ease: "power2.out",
+            // Tells GSAP to use inertia from the scroll velocity, so a fast
+            // flick still snaps cleanly to the next slide instead of overshooting.
+            inertia: false,
           },
         });
-
-        // Ensure correct state on initial load (e.g., reload mid-page)
-        if (trigger.isActive) {
-          document.body.classList.add("lock-navbar");
-        }
 
         // Recalculate on resize
         const onResize = () => ScrollTrigger.refresh();
@@ -291,7 +272,6 @@ export default function Home() {
 
         return () => {
           window.removeEventListener("resize", onResize);
-          document.body.classList.remove("lock-navbar");
         };
       });
 
@@ -374,14 +354,14 @@ export default function Home() {
                 <button className={style.button}>ABOUT US</button>
               </div>
             </div>
-            <div className={`${style.galleryWrap} ${style.gal}`}>
+            <div className={style.galleryWrap}>
               <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />
             </div>
           </section>
         </div>
       </div>
 
-      <div className={style.footerWrap} ref={footerRef}>
+      <div className={style.footerWrap}>
         <Footer />
       </div>
     </div>

@@ -7,7 +7,11 @@ interface PillarShowcaseProps {
   /** Single skyline image shown across the section */
   image: string | StaticImageData;
   imageAlt?: string;
-  /** Pixels per frame on mobile auto-scroll. 0 disables. */
+  /**
+   * Auto-scroll speed in pixels per frame at 60fps.
+   * (Internally converted to px/sec so the speed is the same on 120Hz displays.)
+   * 0 disables auto-scroll.
+   */
   autoScrollSpeed?: number;
 }
 
@@ -30,16 +34,33 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
 
     const canScroll = () => el.scrollWidth > el.clientWidth + 1;
 
-    const loop = () => {
+    // Convert "px per frame at 60fps" → "px per second" so it's framerate-agnostic
+    const pxPerSecond = autoScrollSpeed * 60;
+
+    // The browser rounds scrollLeft to an integer (or device pixel).
+    // Writing `el.scrollLeft += 0.6` repeatedly reads back the same int and
+    // never advances — the fraction gets lost on every read. So we keep a
+    // float accumulator here and only commit whole-pixel changes.
+    let accumulator = el.scrollLeft;
+    let lastTime = performance.now();
+
+    const loop = (time: number) => {
+      const deltaMs = time - lastTime;
+      lastTime = time;
+
       if (!pausedRef.current && canScroll()) {
-        // Width of ONE image copy (half of the duplicated row)
         const oneSetWidth = row.scrollWidth / 2;
 
-        el.scrollLeft += autoScrollSpeed;
+        // Advance the float accumulator
+        accumulator += pxPerSecond * (deltaMs / 1000);
 
-        if (el.scrollLeft >= oneSetWidth) {
-          el.scrollLeft -= oneSetWidth;
+        // Seamless wrap
+        if (accumulator >= oneSetWidth) {
+          accumulator -= oneSetWidth;
         }
+
+        // Commit to the DOM (browser will round, that's fine)
+        el.scrollLeft = accumulator;
       }
       rafRef.current = requestAnimationFrame(loop);
     };
@@ -52,6 +73,9 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
     const resume = () => {
       setTimeout(() => {
         pausedRef.current = false;
+        // Resync accumulator with whatever the user scrolled to
+        accumulator = el.scrollLeft;
+        lastTime = performance.now(); // avoid a big delta-time jump after resume
       }, 1500);
     };
 
@@ -59,8 +83,10 @@ const PillarShowcase: React.FC<PillarShowcaseProps> = ({
       const oneSetWidth = row.scrollWidth / 2;
       if (el.scrollLeft >= oneSetWidth) {
         el.scrollLeft -= oneSetWidth;
+        accumulator = el.scrollLeft;
       } else if (el.scrollLeft <= 0) {
         el.scrollLeft += oneSetWidth;
+        accumulator = el.scrollLeft;
       }
     };
 

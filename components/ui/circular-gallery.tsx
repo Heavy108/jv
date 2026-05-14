@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
   HTMLAttributes,
 } from "react";
-// 1. Import StaticImageData
 import { StaticImageData } from "next/image";
 
 const cn = (...classes: (string | undefined | null | false)[]) =>
@@ -14,10 +13,10 @@ const cn = (...classes: (string | undefined | null | false)[]) =>
 
 export interface GalleryItem {
   common: string;
-  stats:string;
+  stats: string;
   binomial: string;
   photo: {
-    url: string | StaticImageData; 
+    url: string | StaticImageData;
     text: string;
     pos?: string;
     by: string;
@@ -45,18 +44,22 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     },
     ref,
   ) => {
-    const [rotation, setRotation] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const [size, setSize] = useState({ w: 0, h: 0 });
 
     const containerRef = useRef<HTMLDivElement | null>(null);
+    const ringRef = useRef<HTMLDivElement | null>(null); // the rotating inner div
+    const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+    // Rotation is now a plain ref, not React state — no re-render on each frame
+    const rotationRef = useRef(0);
+
     const dragStartX = useRef(0);
     const dragStartY = useRef(0);
     const lastRotation = useRef(0);
     const gestureDecided = useRef<null | "horizontal" | "vertical">(null);
     const isDraggingRef = useRef(false);
 
-    
     useEffect(() => {
       isDraggingRef.current = isDragging;
     }, [isDragging]);
@@ -73,18 +76,53 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       return () => ro.disconnect();
     }, []);
 
-    // Auto-rotation
+    const anglePerItem = 360 / items.length;
+
+    // Imperative render loop: writes transform directly to the DOM each frame.
+    // No React state updates → no re-renders → no stutter.
     useEffect(() => {
       let raf: number;
-      const loop = () => {
+      let lastTime = performance.now();
+
+      const loop = (time: number) => {
+        // Use delta time so speed is consistent regardless of frame rate
+        const deltaMs = time - lastTime;
+        lastTime = time;
+
         if (!isDraggingRef.current && autoRotateSpeed > 0) {
-          setRotation((p) => p + autoRotateSpeed);
+          // autoRotateSpeed was previously degrees/frame at 60fps.
+          // Convert to deg/sec, then apply via delta to make it framerate-agnostic.
+          const degPerSec = autoRotateSpeed * 60;
+          rotationRef.current += degPerSec * (deltaMs / 1000);
         }
+
+        const rot = rotationRef.current;
+
+        // Apply ring rotation directly
+        if (ringRef.current) {
+          ringRef.current.style.transform = `rotateY(${rot}deg)`;
+        }
+
+        // Update each card's opacity based on its facing angle
+        const totalRotation = rot % 360;
+        for (let i = 0; i < cardRefs.current.length; i++) {
+          const card = cardRefs.current[i];
+          if (!card) continue;
+          const itemAngle = i * anglePerItem;
+          const relativeAngle = (itemAngle + totalRotation + 360) % 360;
+          const normalizedAngle = Math.abs(
+            relativeAngle > 180 ? 360 - relativeAngle : relativeAngle,
+          );
+          const opacity = Math.max(0.3, 1 - normalizedAngle / 180);
+          card.style.opacity = String(opacity);
+        }
+
         raf = requestAnimationFrame(loop);
       };
+
       raf = requestAnimationFrame(loop);
       return () => cancelAnimationFrame(raf);
-    }, [autoRotateSpeed]);
+    }, [autoRotateSpeed, anglePerItem]);
 
     // Native non-passive touch listeners (so we can preventDefault)
     useEffect(() => {
@@ -95,7 +133,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         const t = e.touches[0];
         dragStartX.current = t.clientX;
         dragStartY.current = t.clientY;
-        lastRotation.current = rotation;
+        lastRotation.current = rotationRef.current;
         gestureDecided.current = null;
         setIsDragging(true);
       };
@@ -106,19 +144,17 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         const dx = t.clientX - dragStartX.current;
         const dy = t.clientY - dragStartY.current;
 
-        // Decide direction on first significant movement
         if (gestureDecided.current === null) {
           const absX = Math.abs(dx);
           const absY = Math.abs(dy);
-          if (absX < 8 && absY < 8) return; // too early to decide
+          if (absX < 8 && absY < 8) return;
           gestureDecided.current = absX > absY ? "horizontal" : "vertical";
         }
 
         if (gestureDecided.current === "horizontal") {
-          e.preventDefault(); // stop page from scrolling
-          setRotation(lastRotation.current + dx * dragSensitivity);
+          e.preventDefault();
+          rotationRef.current = lastRotation.current + dx * dragSensitivity;
         }
-        // else: let the browser handle vertical scroll naturally
       };
 
       const onTouchEnd = () => {
@@ -137,7 +173,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         el.removeEventListener("touchend", onTouchEnd);
         el.removeEventListener("touchcancel", onTouchEnd);
       };
-    }, [rotation, dragSensitivity]);
+    }, [dragSensitivity]);
 
     // Responsive sizing
     const minDim = Math.min(size.w, size.h) || 0;
@@ -151,19 +187,16 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     // Mouse handlers (desktop)
     const handleMouseDown = (e: React.MouseEvent) => {
       dragStartX.current = e.clientX;
-      lastRotation.current = rotation;
+      lastRotation.current = rotationRef.current;
       setIsDragging(true);
     };
     const handleMouseMove = (e: React.MouseEvent) => {
       if (!isDragging) return;
-      setRotation(
+      rotationRef.current =
         lastRotation.current +
-          (e.clientX - dragStartX.current) * dragSensitivity,
-      );
+        (e.clientX - dragStartX.current) * dragSensitivity;
     };
     const handleMouseEnd = () => setIsDragging(false);
-
-    const anglePerItem = 360 / items.length;
 
     return (
       <div
@@ -189,23 +222,18 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         {...props}
       >
         <div
+          ref={ringRef}
           className="relative w-full h-full"
           style={{
-            transform: `rotateY(${rotation}deg)`,
             transformStyle: "preserve-3d",
-            transition: isDragging ? "none" : "transform 0.1s ease-out",
+            willChange: "transform",
+            // NO CSS transition here — would fight with the per-frame
+            // imperative transform update and cause the cog-wheel stutter.
           }}
         >
           {items.map((item, i) => {
             const itemAngle = i * anglePerItem;
-            const totalRotation = rotation % 360;
-            const relativeAngle = (itemAngle + totalRotation + 360) % 360;
-            const normalizedAngle = Math.abs(
-              relativeAngle > 180 ? 360 - relativeAngle : relativeAngle,
-            );
-            const opacity = Math.max(0.3, 1 - normalizedAngle / 180);
 
-            // 3. Extract the string URL properly
             const imgSrc =
               typeof item.photo.url === "string"
                 ? item.photo.url
@@ -214,6 +242,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
             return (
               <div
                 key={item.common}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
                 role="group"
                 aria-label={item.common}
                 className="absolute"
@@ -225,8 +256,9 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   top: "50%",
                   marginLeft: `-${halfSize}px`,
                   marginTop: `-${halfSize}px`,
-                  opacity,
-                  transition: "opacity 0.3s linear",
+                  willChange: "opacity",
+                  // No opacity transition — it would be re-triggered every
+                  // frame by the imperative opacity updates and cause stutter
                 }}
               >
                 <div className="relative w-full h-full aspect-square rounded-lg shadow-2xl overflow-hidden border border-border bg-card/70 dark:bg-card/30 backdrop-blur-lg">
@@ -241,9 +273,17 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                     <h2 className="text-2xl font-bold leading-tight">
                       {item.stats}
                     </h2>
-                    
+                    {/* min-height reserves space for 2 lines so single-line
+                        captions don't make the text block shorter than
+                        two-line ones — keeps all cards visually aligned */}
+                    <p
+                      className="text-sm leading-snug mt-1"
+                      style={{
+                        minHeight: "2.6em", // ≈ 2 lines at leading-snug
+                      }}
+                    >
                       {item.binomial}
-                   
+                    </p>
                   </div>
                 </div>
               </div>
