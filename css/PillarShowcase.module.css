@@ -64,19 +64,23 @@
     align-items: flex-start;
   }
   .row {
-    height: auto;
+    position: absolute;
+    inset: 0;
+    height: 100%;
     width: 100%;
-    /* max-width: 1200px; */
-    justify-content: center;
-    align-items: flex-start;
+    display: block;
   }
   .image {
     position: absolute;
-
+    left: 50%;
+   top: 0;
+    transform: translateX(-50%);
+ 
     width: 100%;
-    /* max-width: 1200px; */
-    height: 100%;
-    
+    height: auto;
+    min-height: 100%; /* if container is wider than image's natural ratio, fill height too */
+    max-width: none;
+ 
     object-fit: unset;
     object-position: unset;
     display: block;
