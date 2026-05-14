@@ -245,7 +245,7 @@ export default function Home() {
           ease: "none",
         });
 
-        ScrollTrigger.create({
+        const trigger = ScrollTrigger.create({
           trigger: wrap,
           start: "top top",
           end: () => `+=${getDistance()}`,
@@ -260,7 +260,22 @@ export default function Home() {
             delay: 0.05,
             ease: "power2.inOut",
           },
+          // Lock the navbar in place while we're inside the horizontal block —
+          // the vertical scroll deltas here are driving the X animation, not
+          // a real "scroll down" gesture.
+          onToggle: (self) => {
+            if (self.isActive) {
+              document.body.classList.add("lock-navbar");
+            } else {
+              document.body.classList.remove("lock-navbar");
+            }
+          },
         });
+
+        // Ensure correct state on initial load (e.g., reload mid-page)
+        if (trigger.isActive) {
+          document.body.classList.add("lock-navbar");
+        }
 
         // Recalculate on resize
         const onResize = () => ScrollTrigger.refresh();
@@ -268,6 +283,7 @@ export default function Home() {
 
         return () => {
           window.removeEventListener("resize", onResize);
+          document.body.classList.remove("lock-navbar");
         };
       });
 
@@ -278,7 +294,7 @@ export default function Home() {
 
   return (
     <div ref={wrapperRef} className={style.wrapper}>
-      <Navbar />
+      {/* <Navbar /> */}
 
       {/* Horizontal-scroll block (desktop) / vertical stack (mobile) */}
       <div ref={horizontalWrapRef} className={style.horizontalWrap}>

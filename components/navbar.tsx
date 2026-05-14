@@ -179,6 +179,20 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       if (isMenuOpen) return;
 
+      // When the page tells us we're inside the pinned horizontal block
+      // (desktop only), keep the navbar fully visible and ignore vertical
+      // scroll deltas — they're just driving the horizontal animation.
+      if (document.body.classList.contains("lock-navbar")) {
+        gsap.to(`.${styles.menuBar}`, {
+          y: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          overwrite: "auto",
+        });
+        lastScrollY.current = window.scrollY;
+        return;
+      }
+
       const currentScrollY = window.scrollY;
 
       if (currentScrollY > lastScrollY.current) {
