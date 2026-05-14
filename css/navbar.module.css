@@ -1,8 +1,8 @@
 .menuContainer {
   position: fixed;
   width: 100%;
-
-  height: 100vh;
+  /* height: 100vh; */
+  height: fit-content;
   top: 0;
   left: 0;
   z-index: 100;
@@ -15,12 +15,9 @@
   position: fixed;
   top: 0;
   width: calc(100% - 4em);
+  /* max-width: 1200px; */
   height: 64px;
   margin-top: 0.75rem;
-  border-radius: 1rem;
-border: 1px solid rgba(255, 255, 255, 0.50);
- background: rgba(0, 0, 0, 0.25);
-backdrop-filter: blur(16px);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -31,7 +28,6 @@ backdrop-filter: blur(16px);
   background: transparent;
   backdrop-filter: none;
 
-  /* Smooth transition when menu opens/closes — matches the menu's 1s power4.inOut animation */
   transition: background 1s cubic-bezier(0.77, 0, 0.175, 1),
     border-color 1s cubic-bezier(0.77, 0, 0.175, 1),
     backdrop-filter 1s cubic-bezier(0.77, 0, 0.175, 1);
@@ -41,7 +37,6 @@ backdrop-filter: blur(16px);
   will-change: transform, height;
 }
 
-/* Apply the glass background only when menu is open */
 .menuBarOpen {
   border: 1px solid rgba(255, 255, 255, 0.5);
   background: rgba(0, 0, 0, 0.25);
@@ -55,12 +50,14 @@ backdrop-filter: blur(16px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 1.5rem 0.5rem 2rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
+
 .menuLogo {
   display: flex;
   justify-content: center;
 }
+
 .menuLogo a {
   position: relative;
   display: inline-block;
@@ -94,7 +91,6 @@ backdrop-filter: blur(16px);
   transition: all 300ms;
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
-
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(12.5px);
   cursor: pointer;
@@ -132,73 +128,49 @@ backdrop-filter: blur(16px);
 .active.hamburgerIcon:after {
   transform: translateY(0) rotate(-45deg);
 }
-.menuBarContainer{
-  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 
-}
+/* ─────────────────────────────────────────────
+   THE OPENED MENU PANEL
+   Left-aligned vertical list of rows.
+   ───────────────────────────────────────────── */
 .menu {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
- 
-   width: calc(100% - 4em);
-  height: calc(100svh - 4em);
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100% - 4em);
+  /* max-width: 1200px; */
+  /* height: calc(100svh - 4em); */
+  height: fit-content;
   background: transparent;
   border-radius: 1rem;
   overflow: hidden;
   clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;        /* left-align the column */
+  align-items: flex-start;            /* anchor list to the top of the panel */
   pointer-events: none;
   z-index: 100000;
   margin-top: 2em;
   margin-bottom: 2em;
-}
-
-.menuCol {
-  display: flex;
+  padding: 6rem 2rem 2rem 2rem;       /* room below the navbar bar */
 }
 
 .menuLinks {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
-.menuLink {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-  color: #fff;
-  font-family: var(--font-clashdisplay);
-  font-weight: 500;
-}
-.menuLink::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -2px;
+  align-items: stretch;
   width: 100%;
-  height: 2px;
-  background: #fff;
-
-  transform: translateX(-50%) scaleX(0);
-  transform-origin: center;
-  transition: transform 0.35s ease;
+  gap: 0;
 }
 
-.menuLink:hover::after {
-  transform: translateX(-50%) scaleX(1);
-}
 .menuLinkItem {
   position: relative;
-  padding: 1em 0 0.125em 0;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
-  text-align: center;
   pointer-events: all;
   overflow: hidden;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
 }
 
 .menuLinkItemHolder {
@@ -206,85 +178,120 @@ backdrop-filter: blur(16px);
   will-change: transform;
 }
 
-.menuLinkItemHolder > a {
-  font-size: 3.5rem;
-  font-weight: 500;
+/* The "row" — button or link styled as a horizontal flex row.
+   Label on left, icon on right. */
+.menuLinkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.25rem 0.25rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
   text-decoration: none;
-  text-transform: uppercase;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: padding-left 0.25s ease, color 0.25s ease;
+}
+
+.menuLinkRow:hover {
+  padding-left: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.menuLinkLabel {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.2;
-  display: block;
-  text-align: center;
-  transition: color 0.3s;
 }
 
-.menuLinkItemHolder:hover > a {
-  color: rgba(255, 255, 255, 1);
-}
-
-.subMenu {
+.menuLinkIcon {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
 }
 
-.subLink {
-  font-size: 1.5rem;
-  font-weight: 500;
+/* ─────────────────────────────────────────────
+   ACCORDION SUBMENU
+   Uses CSS grid-template-rows: 0fr → 1fr trick to animate to "auto" height.
+   The single `.subMenuInner` child IS the grid row, with overflow:hidden
+   so its contents clip during the animation.
+   ───────────────────────────────────────────── */
+.subMenu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s ease;
+}
 
-  color: rgba(255, 255, 255, 0.65) !important;
-  text-transform: uppercase;
+.subMenuOpen {
+  grid-template-rows: 1fr;
+}
+
+.subMenuInner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.subLinkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.875rem 0.25rem 0.875rem 1.5rem;  /* indent submenu items */
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  letter-spacing: 2px;
-  transition: color 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: padding-left 0.25s ease, color 0.25s ease;
 }
 
-.subLink:hover {
-  color: #fff !important;
+.subLinkRow:hover {
+  padding-left: 2rem;
+  color: #fff;
 }
 
+.subLinkLabel {
+  font-size: clamp(0.9375rem, 1.5vw, 1.125rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.menuLogo img{
+  width: 200px;
+}
 @media (max-width: 1000px) {
-   :global(body.hide-navbar) .menuBar {
+  :global(body.hide-navbar) .menuBar {
     transform: translateY(-150%);
     opacity: 0;
     pointer-events: none;
     transition: transform 0.4s ease, opacity 0.4s ease;
   }
+
   .menu {
     width: calc(100% - 2.5em);
-    height: calc(100svh - 2.5em);
+    /* height: calc(100svh - 2.5em); */
     margin-top: 1.25em;
     margin-bottom: 1.25em;
+    padding: 5rem 1.5rem 1.5rem 1.5rem;
   }
 
   .menuBar {
-      border-radius: 1rem;
-border: 1px dotted rgba(255, 255, 255, 0.50);
- background: rgba(0, 0, 0, 0.25);
-backdrop-filter: blur(16px);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(16px);
     margin: 0.75rem;
-    width: calc(100% - 2.5em);
+    width: calc(100% - 2em);
   }
 
   .menuToggle {
     justify-content: flex-end;
   }
-
-  .menuCol {
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .menuLinkItemHolder > a {
-    font-size: 10vw;
-  }
-
-  .subLink {
-    font-size: 4.5vw;
-  }
+  .menuLogo img{
+  width: 160px;
+}
 }

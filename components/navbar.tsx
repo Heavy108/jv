@@ -9,12 +9,50 @@ import styles from "@/css/navbar.module.css";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 
-// Interface for type safety
 interface MenuLink {
   path: string;
   label: string;
   children?: { path: string; label: string }[];
 }
+
+// Up-right arrow icon used on every row
+const ArrowIcon: React.FC = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <line x1="7" y1="17" x2="17" y2="7" />
+    <polyline points="8 7 17 7 17 16" />
+  </svg>
+);
+
+// Chevron for parents with submenu — rotates when open
+const ChevronIcon: React.FC<{ open: boolean }> = ({ open }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    style={{
+      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+      transition: "transform 0.3s ease",
+    }}
+  >
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
 
 const Navbar: React.FC = () => {
   const menuLinks: MenuLink[] = [
@@ -26,10 +64,10 @@ const Navbar: React.FC = () => {
         { path: "#", label: "PowerEd" },
         { path: "#", label: "PowerRx" },
         { path: "#", label: "PowerPod" },
-        { path: "#", label: "Empower" },
+        // { path: "#", label: "Empower" },
       ],
     },
-    { path: "/about", label: "About" },
+    { path: "#", label: "About" },
   ];
 
   const pathname = usePathname();
@@ -39,8 +77,13 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [shouldDelayClose, setShouldDelayClose] = useState<boolean>(false);
+  // Track which submenus are open. Initialised with every parent label that
+  // has children, so all submenus are expanded by default when the menu opens.
+  const initialOpenSubmenus = (): Set<string> =>
+    new Set(menuLinks.filter((l) => l.children?.length).map((l) => l.label));
+  const [openSubmenus, setOpenSubmenus] =
+    useState<Set<string>>(initialOpenSubmenus);
 
-  // GSAP Timelines stored in refs
   const menuAnimation = useRef<gsap.core.Timeline | null>(null);
   const menuLinksAnimation = useRef<gsap.core.Timeline | null>(null);
   const menuBarAnimation = useRef<gsap.core.Timeline | null>(null);
@@ -48,10 +91,8 @@ const Navbar: React.FC = () => {
   const scrollPositionRef = useRef<number>(0);
   const previousPathRef = useRef<string>(pathname);
 
-  // Tracks which lock mode we used to open — so close uses the matching unlock
   const lockModeRef = useRef<"fixed" | "overflow" | null>(null);
 
-  // Safely grab initial window width after hydration to prevent mismatches
   useEffect(() => {
     const timer = setTimeout(() => {
       setWindowWidth(window.innerWidth);
@@ -70,10 +111,6 @@ const Navbar: React.FC = () => {
     if (typeof window === "undefined") return;
 
     if (disableScroll) {
-      // If we're inside the horizontal pin (desktop), DO NOT use position:fixed.
-      // That would change window.scrollY and break the GSAP horizontal trigger,
-      // making the slide jump. A simple overflow:hidden is enough — the pin
-      // already prevents scrolling away while we're in it.
       const insideHorizontalPin =
         document.body.classList.contains("lock-navbar");
 
@@ -89,7 +126,6 @@ const Navbar: React.FC = () => {
         document.body.style.width = "100%";
       }
     } else {
-      // Undo whichever lock we set up
       if (lockModeRef.current === "fixed") {
         document.body.style.removeProperty("overflow");
         document.body.style.removeProperty("position");
@@ -107,11 +143,15 @@ const Navbar: React.FC = () => {
     const newMenuState = !isMenuOpen;
     setIsMenuOpen(newMenuState);
     toggleBodyScroll(newMenuState);
+    // When the menu re-opens we want all submenus expanded again,
+    // even if the user collapsed some last time.
+    if (!newMenuState) setOpenSubmenus(initialOpenSubmenus());
   };
 
   const closeMenu = () => {
     if (isMenuOpen) {
       setIsMenuOpen(false);
+      setOpenSubmenus(initialOpenSubmenus());
       toggleBodyScroll(false);
     }
   };
@@ -122,7 +162,15 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Handle route change closing logic
+  const toggleSubmenu = (label: string) => {
+    setOpenSubmenus((cur) => {
+      const next = new Set(cur);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
+      return next;
+    });
+  };
+
   useEffect(() => {
     if (pathname !== previousPathRef.current && shouldDelayClose) {
       const timer = setTimeout(() => {
@@ -136,12 +184,11 @@ const Navbar: React.FC = () => {
     previousPathRef.current = pathname;
   }, [pathname, shouldDelayClose]);
 
-  // Handle GSAP Animation Initializations
   useGSAP(
     () => {
       if (windowWidth === 0) return;
 
-      gsap.set(`.${styles.menuLinkItemHolder}`, { y: 125 });
+      gsap.set(`.${styles.menuLinkItemHolder}`, { y: 80 });
 
       menuAnimation.current = gsap
         .timeline({ paused: true })
@@ -152,7 +199,7 @@ const Navbar: React.FC = () => {
         });
 
       const heightValue =
-        windowWidth < 1000 ? "calc(100% - 2.5em)" : "calc(100% - 4em)";
+        windowWidth < 1000 ? "calc(65% - 2.5em)" : "calc(85% - 4em)";
 
       menuBarAnimation.current = gsap
         .timeline({ paused: true })
@@ -175,7 +222,6 @@ const Navbar: React.FC = () => {
     { dependencies: [windowWidth], scope: menuContainer },
   );
 
-  // Play/Reverse animations based on isMenuOpen state
   useEffect(() => {
     if (
       menuAnimation.current &&
@@ -194,18 +240,12 @@ const Navbar: React.FC = () => {
     }
   }, [isMenuOpen]);
 
-  // Handle scroll to hide/show menu bar
   useEffect(() => {
-    // Minimum scroll delta before we consider it intentional. Snap
-    // animations and ScrollTrigger refresh can nudge scrollY by a few px;
-    // those should not trigger a hide.
     const MIN_DELTA = 8;
 
     const handleScroll = () => {
       if (isMenuOpen) return;
 
-      // When inside the pinned horizontal block (desktop), keep navbar visible
-      // and ignore vertical scroll deltas — they're driving the X animation.
       if (document.body.classList.contains("lock-navbar")) {
         gsap.to(`.${styles.menuBar}`, {
           y: 0,
@@ -220,7 +260,6 @@ const Navbar: React.FC = () => {
       const currentScrollY = window.scrollY;
       const delta = currentScrollY - lastScrollY.current;
 
-      // Ignore micro-scrolls (likely from snap/refresh, not the user)
       if (Math.abs(delta) < MIN_DELTA) {
         return;
       }
@@ -248,18 +287,12 @@ const Navbar: React.FC = () => {
     };
   }, [isMenuOpen]);
 
-  // Watch for the `lock-navbar` body class so we react INSTANTLY when the
-  // horizontal pin starts/ends — without waiting for the next scroll event.
-  // Fixes the case where a previously-fired "hide" tween (y: -200) was still
-  // mid-flight when the pin activated, causing the navbar to fly up between
-  // slides 2 and 3.
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     const syncToLockState = () => {
       if (isMenuOpen) return;
       if (document.body.classList.contains("lock-navbar")) {
-        // Snap to visible and kill any in-flight hide tween
         gsap.to(`.${styles.menuBar}`, {
           y: 0,
           duration: 0.3,
@@ -270,7 +303,6 @@ const Navbar: React.FC = () => {
       }
     };
 
-    // Run once on mount in case the class is already there (page reload mid-pin)
     syncToLockState();
 
     const mo = new MutationObserver(syncToLockState);
@@ -282,7 +314,6 @@ const Navbar: React.FC = () => {
     return () => mo.disconnect();
   }, [isMenuOpen]);
 
-  // Cleanup body scroll lock on unmount
   useEffect(() => {
     return () => {
       if (lockModeRef.current) {
@@ -316,40 +347,73 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+
       <div className={styles.menu}>
-        <div className={styles.menuCol}>
-          <div className={styles.menuSubCol}>
-            <div className={styles.menuLinks}>
-              {menuLinks.map((link, index) => (
-                <div key={index} className={styles.menuLinkItem}>
-                  <div className={styles.menuLinkItemHolder}>
+        <div className={styles.menuLinks}>
+          {menuLinks.map((link, index) => {
+            const hasChildren = !!link.children?.length;
+            const isOpen = openSubmenus.has(link.label);
+
+            return (
+              <div key={index} className={styles.menuLinkItem}>
+                <div className={styles.menuLinkItemHolder}>
+                  {hasChildren ? (
+                    // Parent row with children — clicking toggles the
+                    // accordion, doesn't navigate
+                    <button
+                      type="button"
+                      className={styles.menuLinkRow}
+                      onClick={() => toggleSubmenu(link.label)}
+                      aria-expanded={isOpen}
+                    >
+                      <span className={styles.menuLinkLabel}>{link.label}</span>
+                      <span className={styles.menuLinkIcon}>
+                        <ChevronIcon open={isOpen} />
+                      </span>
+                    </button>
+                  ) : (
                     <Link
                       href={link.path}
-                      className={styles.menuLink}
+                      className={styles.menuLinkRow}
                       onClick={() => handleLinkClick(link.path)}
                     >
-                      {link.label}
+                      <span className={styles.menuLinkLabel}>{link.label}</span>
+                      <span className={styles.menuLinkIcon}>
+                        <ArrowIcon />
+                      </span>
                     </Link>
+                  )}
 
-                    {link.children && (
-                      <div className={styles.subMenu}>
-                        {link.children.map((child, childIndex) => (
+                  {/* Accordion submenu */}
+                  {hasChildren && (
+                    <div
+                      className={`${styles.subMenu} ${
+                        isOpen ? styles.subMenuOpen : ""
+                      }`}
+                    >
+                      <div className={styles.subMenuInner}>
+                        {link.children!.map((child, childIndex) => (
                           <Link
                             key={childIndex}
                             href={child.path}
-                            className={styles.subLink}
+                            className={styles.subLinkRow}
                             onClick={() => handleLinkClick(child.path)}
                           >
-                            {child.label}
+                            <span className={styles.subLinkLabel}>
+                              {child.label}
+                            </span>
+                            <span className={styles.menuLinkIcon}>
+                              <ArrowIcon />
+                            </span>
                           </Link>
                         ))}
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

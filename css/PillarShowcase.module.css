@@ -22,7 +22,7 @@
 .row {
   display: flex;
   align-items: flex-end;
-  height: 280px;
+  height: 320px;
   width: max-content;
 }
 
