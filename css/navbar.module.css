@@ -91,14 +91,14 @@
   transition: all 300ms;
   border-radius: 0.5rem;
   border: 1px solid rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.1);
+  /* background: rgba(255, 255, 255, 0.1); */
   backdrop-filter: blur(12.5px);
   cursor: pointer;
   padding: 0;
 }
 
 .hamburgerIcon:hover {
-  background: rgba(255, 255, 255, 0.2);
+  /* background: rgba(255, 255, 255, 0.2); */
 }
 
 .hamburgerIcon:before,
@@ -261,6 +261,8 @@
   letter-spacing: 0.02em;
 }
 .menuLogo img{
+    padding-left: 8px;
+
   width: 200px;
 }
 @media (max-width: 1000px) {
@@ -292,6 +294,7 @@
     justify-content: flex-end;
   }
   .menuLogo img{
+    padding-left: 8px;
   width: 160px;
 }
 }
