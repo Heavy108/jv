@@ -145,7 +145,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       cardSize ?? Math.max(200, Math.min(340, minDim * 0.7));
     const minRadius = (computedCardSize * items.length) / (2 * Math.PI) + 45;
     const computedRadius =
-      radius ?? Math.max(minRadius, Math.min(minDim * 0.28, 420));
+      radius ?? Math.max(minRadius, Math.min(minDim * 0.28, 400));
     const halfSize = computedCardSize / 2;
 
     // Mouse handlers (desktop)
