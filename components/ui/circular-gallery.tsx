@@ -40,7 +40,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       radius,
       cardSize,
       dragSensitivity = 0.5,
-      autoRotateSpeed = 0.20,
+      autoRotateSpeed = 0.15,
       ...props
     },
     ref,
