@@ -71,6 +71,8 @@
         align-items: flex-start;
     }
     .image {
+    position: absolute;
+
         width: 100%;
         max-width:1200px;
         height: 100%;

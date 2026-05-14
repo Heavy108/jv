@@ -250,15 +250,23 @@ export default function Home() {
           start: "top top",
           end: () => `+=${getDistance()}`,
           pin: true,
-          scrub: 1,
+          // Tighter scrub = less lag between wheel input and horizontal motion.
+          // Lower number feels more direct; higher feels floaty.
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           animation: tween,
+          // Snap to the nearest slide once the user stops scrolling.
+          // - `duration` is short and tight so the snap feels like an
+          //   assist, not a takeover.
+          // - `delay` waits for the user to actually pause before snapping,
+          //   so a slow manual scroll isn't fought against.
+          // - `power3.out` decelerates smoothly into the target.
           snap: {
             snapTo: 1 / (sections.length - 1),
-            duration: { min: 0.2, max: 0.6 },
-            delay: 0.05,
-            ease: "power2.inOut",
+            duration: { min: 0.25, max: 0.5 },
+            delay: 0.12,
+            ease: "power3.out",
           },
           // Lock the navbar in place while we're inside the horizontal block —
           // the vertical scroll deltas here are driving the X animation, not
