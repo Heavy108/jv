@@ -287,7 +287,10 @@ export default function Home() {
       {/* Horizontal-scroll block (desktop) / vertical stack (mobile) */}
       <div ref={horizontalWrapRef} className={style.horizontalWrap}>
         <div ref={horizontalTrackRef} className={style.horizontalTrack}>
+
+
           <section className={style.outerContainer}>
+            
             <div className={style.extrapad}>
               <div className={style.container}>
                 <div className={style.title}>

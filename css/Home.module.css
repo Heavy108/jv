@@ -55,7 +55,9 @@
     max-width: 1200px;
     margin: 0 auto;
     box-sizing: border-box;
+    
 }
+
 
 .galleryWrap {
     width: 100%;
@@ -69,6 +71,7 @@
     padding: 0rem;
     overflow: hidden;
     box-sizing: border-box;
+    
 }
 
 .title h1 {
