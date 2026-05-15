@@ -48,10 +48,10 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
     const [size, setSize] = useState({ w: 0, h: 0 });
 
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const ringRef = useRef<HTMLDivElement | null>(null); // the rotating inner div
+    const ringRef = useRef<HTMLDivElement | null>(null);
     const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-    // Rotation is now a plain ref, not React state — no re-render on each frame
+    // Rotation lives in a ref so the rAF loop never triggers React re-renders.
     const rotationRef = useRef(0);
 
     const dragStartX = useRef(0);
@@ -78,32 +78,27 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
 
     const anglePerItem = 360 / items.length;
 
-    // Imperative render loop: writes transform directly to the DOM each frame.
-    // No React state updates → no re-renders → no stutter.
+    // Imperative render loop — writes transform directly to the DOM each frame
     useEffect(() => {
       let raf: number;
       let lastTime = performance.now();
 
       const loop = (time: number) => {
-        // Use delta time so speed is consistent regardless of frame rate
         const deltaMs = time - lastTime;
         lastTime = time;
 
         if (!isDraggingRef.current && autoRotateSpeed > 0) {
-          // autoRotateSpeed was previously degrees/frame at 60fps.
-          // Convert to deg/sec, then apply via delta to make it framerate-agnostic.
           const degPerSec = autoRotateSpeed * 60;
           rotationRef.current += degPerSec * (deltaMs / 1000);
         }
 
         const rot = rotationRef.current;
 
-        // Apply ring rotation directly
         if (ringRef.current) {
           ringRef.current.style.transform = `rotateY(${rot}deg)`;
         }
 
-        // Update each card's opacity based on its facing angle
+        // Optional: fade cards facing away. Keep enabled so the 3D illusion reads.
         const totalRotation = rot % 360;
         for (let i = 0; i < cardRefs.current.length; i++) {
           const card = cardRefs.current[i];
@@ -113,7 +108,8 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
           const normalizedAngle = Math.abs(
             relativeAngle > 180 ? 360 - relativeAngle : relativeAngle,
           );
-          const opacity = 1;
+          // Cards facing forward are fully opaque; cards behind fade out.
+          const opacity = Math.max(0.25, 1 - normalizedAngle / 140);
           card.style.opacity = String(opacity);
         }
 
@@ -175,13 +171,41 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
       };
     }, [dragSensitivity]);
 
-    // Responsive sizing
-    const minDim = Math.min(size.w, size.h) || 0;
-    const computedCardSize =
-      cardSize ?? Math.max(200, Math.min(340, minDim * 0.7));
-    const minRadius = (computedCardSize * items.length) / (2 * Math.PI) + 45;
-    const computedRadius =
-      radius ?? Math.max(minRadius, Math.min(minDim * 0.28, 400));
+    // ── Responsive sizing ────────────────────────────────────────────────
+    // Detect a mobile-ish container so we can scale cards down properly.
+    const isMobile = size.w > 0 && size.w < 768;
+
+    // Use WIDTH (not minDim) as the primary driver on mobile, because the
+    // wrap is ~380px wide × ~380px tall — minDim would still produce huge
+    // cards. We want the front card to fill roughly half the viewport width,
+    // not 70% of it.
+    let computedCardSize: number;
+    if (cardSize) {
+      computedCardSize = cardSize;
+    } else if (isMobile) {
+      // Mobile: cap at ~190px so cards feel like phone-sized chips, not posters
+      computedCardSize = Math.max(150, Math.min(200, size.w * 0.5));
+    } else {
+      const minDim = Math.min(size.w, size.h) || 0;
+      computedCardSize = Math.max(220, Math.min(340, minDim * 0.6));
+    }
+
+    // Radius must be big enough that cards don't overlap on the ring.
+    // circumference = cardSize * itemCount, so radius >= (cardSize * n) / (2π) + gap
+    const minRadius = (computedCardSize * items.length) / (2 * Math.PI) + 40;
+    let computedRadius: number;
+    if (radius) {
+      computedRadius = radius;
+    } else if (isMobile) {
+      // On mobile, prefer the minRadius (just enough to separate cards) so
+      // the front card isn't pushed off-screen. minDim-based radius made
+      // the ring too wide on tall narrow containers.
+      computedRadius = Math.max(minRadius, size.w * 0.55);
+    } else {
+      const minDim = Math.min(size.w, size.h) || 0;
+      computedRadius = Math.max(minRadius, Math.min(minDim * 0.28, 420));
+    }
+
     const halfSize = computedCardSize / 2;
 
     // Mouse handlers (desktop)
@@ -210,11 +234,11 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
         role="region"
         aria-label="Circular 3D Gallery"
         className={cn(
-          "relative w-full h-full flex items-center justify-center select-none",
+          "relative w-full h-full flex items-center justify-center select-none overflow-hidden",
           isDragging ? "cursor-grabbing" : "cursor-grab",
           className,
         )}
-        style={{ perspective: "2000px", touchAction: "pan-y" }}
+        style={{ perspective: "1400px", touchAction: "pan-y" }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseEnd}
@@ -227,8 +251,6 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
           style={{
             transformStyle: "preserve-3d",
             willChange: "transform",
-            // NO CSS transition here — would fight with the per-frame
-            // imperative transform update and cause the cog-wheel stutter.
           }}
         >
           {items.map((item, i) => {
@@ -257,11 +279,10 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                   marginLeft: `-${halfSize}px`,
                   marginTop: `-${halfSize}px`,
                   willChange: "opacity",
-                  // No opacity transition — it would be re-triggered every
-                  // frame by the imperative opacity updates and cause stutter
+                  backfaceVisibility: "hidden",
                 }}
               >
-                <div className="relative w-full h-full aspect-square rounded-lg shadow-2xl overflow-hidden border border-border bg-card/70 dark:bg-card/30 backdrop-blur-lg">
+                <div className="relative w-full h-full aspect-square rounded-lg shadow-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-lg">
                   <img
                     src={imgSrc}
                     alt={item.photo.text}
@@ -269,17 +290,11 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     style={{ objectPosition: item.photo.pos || "center" }}
                   />
-                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/80 to-transparent text-white pointer-events-none">
-                    <h2 className="text-3xl font-bold leading-tight">
+                  <div className="absolute bottom-0 left-0 w-full p-3 bg-gradient-to-t from-black/85 via-black/50 to-transparent text-white pointer-events-none">
+                    <h2 className="text-2xl md:text-3xl font-bold leading-tight">
                       {item.stats}
                     </h2>
-                    
-                    <p
-                      className="text-sm leading-snug mt-1"
-                      style={{
-                        minHeight: "2.6em", // ≈ 2 lines at leading-snug
-                      }}
-                    >
+                    <p className="text-xs md:text-sm leading-snug mt-1 opacity-90">
                       {item.binomial}
                     </p>
                   </div>
