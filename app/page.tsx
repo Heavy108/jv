@@ -288,20 +288,22 @@ export default function Home() {
       <div ref={horizontalWrapRef} className={style.horizontalWrap}>
         <div ref={horizontalTrackRef} className={style.horizontalTrack}>
           <section className={style.outerContainer}>
-            <div className={style.extrapad}>
-              <div className={style.container}>
-                <div className={style.title}>
-                  <h1>
-                    <span>Reimagining</span> <span>Investing</span>
-                  </h1>
+            <div className={style.box}>
+              <div className={style.extrapad}>
+                <div className={style.container}>
+                  <div className={style.title}>
+                    <h1>
+                      <span>Reimagining</span> <span>Investing</span>
+                    </h1>
+                  </div>
+                  <p className={style.desc}>
+                    Traditional investing measures profit; we measures impact
+                    through
+                    <span> Sphere of Influence (SOI)</span>, where capital
+                    shapes societal outcomes.
+                  </p>
+                  <button className={style.button}>ABOUT US</button>
                 </div>
-                <p className={style.desc}>
-                  Traditional investing measures profit; we measures impact
-                  through
-                  <span> Sphere of Influence (SOI)</span>, where capital shapes
-                  societal outcomes.
-                </p>
-                <button className={style.button}>ABOUT US</button>
               </div>
             </div>
             <div className={style.galleryWrap}>
@@ -310,6 +312,8 @@ export default function Home() {
           </section>
 
           <section className={style.outerContainer}>
+            <div className={style.box}>
+
             <div className={style.extrapad}>
               <div className={style.container}>
                 <div className={style.title}>
@@ -329,12 +333,15 @@ export default function Home() {
                 <button className={style.button}>EXPLORE GRID</button>
               </div>
             </div>
+            </div>
             <div className={style.galleryWrap}>
               <PillarShowcase image={skylineImg} imageAlt="Ecosystem" />
             </div>
           </section>
 
           <section className={style.outerContainer}>
+            <div className={style.box}>
+
             <div className={style.extrapad}>
               <div className={style.container}>
                 <div className={style.title}>
@@ -353,6 +360,7 @@ export default function Home() {
                 </p>
                 <button className={style.button}>ABOUT US</button>
               </div>
+            </div>
             </div>
             <div className={style.galleryWrap}>
               <StatCardShowcase cards={stats} autoScrollSpeed={0.6} />

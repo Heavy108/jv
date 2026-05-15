@@ -1,78 +1,101 @@
 /* ─────────────────────────────────────────────
-   MOBILE / TABLET  (< 1024px)
-   Normal vertical document scroll. No snapping.
-   Using svh so URL bar show/hide doesn't resize sections.
+   MOBILE  (< 768px)
+   Glass card behind text, carousel edge-to-edge
+   overlapping the glass card.
    ───────────────────────────────────────────── */
 .wrapper {
     width: 100%;
-    overflow-x: hidden; /* hard stop against any horizontal overflow leaking to body */
+    overflow-x: hidden;
 }
 
 .outerContainer {
     background: linear-gradient(180deg, #194798 0%, #081732 100%);
-    min-height: 100vh;       /* fallback for browsers without svh */
-    min-height: 100svh;      /* stays constant — no jump when URL bar hides */
+    
     padding: 0;
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
     overflow-y: visible;
+    position: relative;
 }
+
 /* Section 1 */
 .outerContainer:nth-child(1) {
     padding-top: 4.75rem;
+    min-height: 100vh;
+    min-height: 100svh;
 }
 
 /* Section 2 */
 .outerContainer:nth-child(2) {
     padding-top: 2rem;
+       min-height: 110vh;
+    min-height: 110svh;
 }
 
 /* Section 3 */
 .outerContainer:nth-child(3) {
     padding-top: 2rem;
+    /* min-height: 1vh; */
+    min-height: 110svh;
 }
+
+/* ── THE GLASS CARD (mobile only) ── */
+.box {
+    position: relative;
+    width: calc(100% - 3rem);
+    max-width: 1200px;
+    padding-top: 1.5rem;
+    margin: 1.5rem auto 0rem;        /* negative bottom margin pushes bottom edge off the section */
+    border-radius: 1.1875rem 1.1875rem 0 0;   /* round only top corners */
+    background: rgba(217, 217, 217, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: none;          /* kill the bottom border */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+    flex: 1;                      /* stretches to fill remaining section height */
+    z-index: 1;
+    /* REMOVE: padding-bottom: 18rem;  — no longer needed, flex handles it */
+}
+
 .extrapad {
-    padding: 0rem 1.5rem;
+    padding: 0 1.5rem;
     width: 100%;
-    max-width: 100%;
     box-sizing: border-box;
 }
 
 .container {
     padding: 1rem;
     color: white;
-    border-radius: 1rem;
-     border: 1px solid #9BBBF1;
-    background: rgba(217, 217, 217, 0.20);
-    box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
-    /* display: flex; */
+    display: flex;
     flex-direction: column;
-    /* text-align: center;
-    align-items: center; */
+    text-align: center;
+    align-items: center;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
     box-sizing: border-box;
 }
 
+/* Carousel overlaps glass card edge-to-edge (mobile only) */
 .galleryWrap {
     width: 100%;
     max-width: 100%;
     height: 380px;
-    margin-top: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    padding: 0rem;
-    overflow: hidden;
     box-sizing: border-box;
+    position: relative;
+    z-index: 2;
+    margin-top: -16rem;
+    padding: 0;
+    overflow: hidden;
+        /* overflow-y: visible; */
 }
 
 .title h1 {
@@ -106,8 +129,6 @@
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
-    /* line-height: 1.25rem; */
-    /* letter-spacing: 0.035rem; */
     margin: 0.5rem 0 1rem 0;
 }
 
@@ -136,7 +157,6 @@
     cursor: pointer;
 }
 
-/* On mobile/tablet the horizontal track is a no-op — sections just stack */
 .horizontalWrap {
     width: 100%;
     max-width: 100vw;
@@ -155,31 +175,78 @@
 }
 
 
+/* ─────────────────────────────────────────────
+   TABLET  (≥ 768px)
+   Reset .box — no glass card, normal stack as before.
+   ───────────────────────────────────────────── */
 @media only screen and (min-width: 768px) {
+     .outerContainer {
+        padding: 6rem 0 0 0;
+        display: flex;
+        justify-content: center;       /* this centers vertically since flex-direction: column */
+        align-items: center;           /* this centers horizontally */
+    }
+      .outerContainer:nth-child(1),
+    .outerContainer:nth-child(2),
+    .outerContainer:nth-child(3) {
+        min-height: 100vh;
+        min-height: 100svh;
+    }
+
+    .box {
+        width: 100%;                   /* explicit width — no longer commented */
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        padding-bottom: 0;
+        border-radius: 0;
+        background: transparent;
+        border: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
+        z-index: auto;
+    }
+
     .extrapad {
-        padding: 0rem 3rem;
+        padding: 0 3rem;
+        display: flex;                 /* NEW */
+        justify-content: center;       /* NEW — centers .container horizontally */
     }
-    .outerContainer {
-        padding: 6rem 0rem 0rem 0rem;
-    }
+
     .container {
+        max-width: 1200px;
+        width: 100%;                   /* NEW — fills up to max-width */
+        margin: 0 auto;                /* NEW — fallback centering */
         padding: 2rem;
+        border-radius: 1rem;
+        border: 1px solid #9BBBF1;
+        background: rgba(217, 217, 217, 0.20);
+        box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
     }
+
     .title h1 {
         font-size: 3rem;
     }
+
     .desc {
         font-size: 1.125rem;
         margin: 0.5rem 0 1.5rem 0;
     }
+
     .button {
         font-size: 1.125rem;
         padding: 1rem 1.5rem;
         height: 3rem;
     }
+
+    /* Reset carousel to normal flow */
     .galleryWrap {
-        padding: 0rem 3rem;
+        padding: 0 3rem;
         height: 480px;
+        margin-top: 1rem;
+        overflow: hidden;
+        z-index: auto;
     }
 }
 
@@ -193,7 +260,6 @@
         overflow-x: hidden;
     }
 
-    /* The pinned viewport — exactly one screen tall */
     .horizontalWrap {
         position: relative;
         height: 100vh;
@@ -203,7 +269,6 @@
         overflow: hidden;
     }
 
-    /* The track that GSAP will translate horizontally */
     .horizontalTrack {
         display: flex;
         flex-direction: row;
@@ -213,7 +278,6 @@
         will-change: transform;
     }
 
-    /* Each section fills exactly one viewport */
     .outerContainer {
         flex: 0 0 100vw;
         width: 100vw;
@@ -224,20 +288,22 @@
         padding: 5.5rem 0 0 0;
         overflow: hidden;
     }
-.outerContainer:nth-child(2) {
-    padding-top: 5rem;
-}
 
-/* Section 3 */
-.outerContainer:nth-child(3) {
-    padding-top: 5rem;
-}
+    .outerContainer:nth-child(2) {
+        padding-top: 5rem;
+    }
+    .outerContainer:nth-child(3) {
+        padding-top: 5rem;
+    }
+
     .title {
         align-items: center;
     }
+
     .container {
         border-radius: 1.5rem;
     }
+
     .galleryWrap {
         flex: 1;
         height: auto;
@@ -246,30 +312,27 @@
         margin-top: 1.5rem;
         overflow: hidden;
     }
-    .gal{
-        /* padding-bottom: 3rem; */
-    }
 }
 
 @media only screen and (min-width: 1440px) {
     .outerContainer {
-        padding: 5.5rem 5rem 0rem 5rem;
+        padding: 5.5rem 5rem 0 5rem;
     }
+
     .container {
         padding: 2rem 2.5rem;
     }
+
     .title h1 {
         font-size: 4rem;
     }
+
     .desc {
         font-size: 1.25rem;
         margin: 0.5rem 0 2rem 0;
     }
-    .galleryWrap{
-        padding: 0rem 5rem;
 
-    }
-     .gal{
-        /* padding-bottom: 5rem; */
+    .galleryWrap {
+        padding: 0 5rem;
     }
 }

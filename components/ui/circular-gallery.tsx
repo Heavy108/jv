@@ -294,7 +294,7 @@ const CircularGallery = React.forwardRef<HTMLDivElement, CircularGalleryProps>(
                     <h2 className="text-2xl md:text-3xl font-bold leading-tight">
                       {item.stats}
                     </h2>
-                    <p className="text-xs md:text-sm leading-snug mt-1 opacity-90">
+                    <p className="text-xs md:text-sm leading-snug mt-1 opacity-90 line-clamp-2 min-h-[2.6em]">
                       {item.binomial}
                     </p>
                   </div>
