@@ -44,24 +44,45 @@
     min-height: 110svh;
 }
 
-/* ── THE GLASS CARD (mobile only) ── */
 .box {
     position: relative;
     width: calc(100% - 3rem);
     max-width: 1200px;
     padding-top: 1.5rem;
-    margin: 1.5rem auto 0rem;        /* negative bottom margin pushes bottom edge off the section */
-    border-radius: 1.1875rem 1.1875rem 0 0;   /* round only top corners */
+    margin: 1.5rem auto 0;
+    border-radius: 1.1875rem 1.1875rem 0 0;
     background: rgba(217, 217, 217, 0.07);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-bottom: none;          /* kill the bottom border */
+    border-bottom: none;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
     box-sizing: border-box;
-    flex: 1;                      /* stretches to fill remaining section height */
     z-index: 1;
-    /* REMOVE: padding-bottom: 18rem;  — no longer needed, flex handles it */
+    flex: 1 1 auto;              /* CHANGED — allows it to grow AND shrink to fill */
+    min-height: 0;               /* NEW — flex item needs this to grow inside parent */
+    align-self: stretch;         /* NEW — guarantee it stretches vertically */
+}
+
+.galleryWrap {
+    width: 100%;
+    max-width: 100%;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: 0;
+    
+    /* CHANGED — out of flow */
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;                   /* anchor to bottom of section */
+    z-index: 2;
+    /* REMOVE: position: relative; */
+    /* REMOVE: margin-top: -16rem; */
 }
 
 .extrapad {
@@ -82,7 +103,7 @@
 }
 
 /* Carousel overlaps glass card edge-to-edge (mobile only) */
-.galleryWrap {
+/* .galleryWrap {
     width: 100%;
     max-width: 100%;
     height: 380px;
@@ -95,13 +116,12 @@
     margin-top: -16rem;
     padding: 0;
     overflow: hidden;
-        /* overflow-y: visible; */
-}
+} */
 
 .title h1 {
     color: #FFF;
     font-family: Montserrat;
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -121,6 +141,11 @@
 
 .title span:last-child {
     font-weight: 600;
+    font-size: 2.5rem;          /* NEW — larger on mobile */
+    display: block;             /* NEW — forces it to a new line if you want it stacked */
+    line-height: 1;  
+    margin-top: 4px;
+               /* tighter line-height looks better at large size */
 }
 
 .desc {
@@ -129,7 +154,7 @@
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
-    margin: 0.5rem 0 1rem 0;
+    margin: 1rem 0 1.5rem 0;
 }
 
 .desc span {
@@ -194,19 +219,24 @@
     }
 
     .box {
-        width: 100%;                   /* explicit width — no longer commented */
-        max-width: none;
-        margin: 0;
-        padding: 0;
-        padding-bottom: 0;
-        border-radius: 0;
-        background: transparent;
-        border: none;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        box-shadow: none;
-        z-index: auto;
-    }
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 0;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    z-index: auto;
+    
+    /* NEW — reset mobile flex behavior */
+    flex: 0 1 auto;
+    min-height: auto;
+    align-self: auto;
+}
 
     .extrapad {
         padding: 0 3rem;
@@ -240,13 +270,23 @@
         height: 3rem;
     }
 
-    /* Reset carousel to normal flow */
-    .galleryWrap {
+   .galleryWrap {
+        position: static;        /* NEW — back to normal flow */
+        bottom: auto;            /* NEW — clear mobile value */
+        left: auto;              /* NEW */
+        right: auto;             /* NEW */
         padding: 0 3rem;
         height: 480px;
         margin-top: 1rem;
         overflow: hidden;
         z-index: auto;
+    }
+           .title span:last-child {
+        font-size: inherit;     /* NEW — back to normal h1 size */
+        display: inline;        /* NEW — back to inline if you used display: block above */
+        line-height: normal;
+    margin-top: 0px;
+
     }
 }
 
