@@ -77,7 +77,7 @@
 .title h1 {
     color: #FFF;
     font-family: Montserrat;
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -97,6 +97,11 @@
 
 .title span:last-child {
     font-weight: 600;
+    font-size: 2.5rem;          /* NEW — larger on mobile */
+    display: block;             /* NEW — forces it to a new line if you want it stacked */
+    line-height: 1;  
+    margin-top: 4px;
+               /* tighter line-height looks better at large size */
 }
 
 .desc {
@@ -107,7 +112,7 @@
     font-weight: 400;
     /* line-height: 1.25rem; */
     /* letter-spacing: 0.035rem; */
-    margin: 0.5rem 0 1rem 0;
+    margin: 0.5rem 0 1.5rem 0;
 }
 
 .desc span {
@@ -179,6 +184,13 @@
     .galleryWrap {
         padding: 0rem 3rem;
         height: 480px;
+    }
+       .title span:last-child {
+        font-size: inherit;     /* NEW — back to normal h1 size */
+        display: inline;        /* NEW — back to inline if you used display: block above */
+        line-height: normal;
+    margin-top: 0px;
+
     }
 }
 
