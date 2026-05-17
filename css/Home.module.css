@@ -1,224 +1,211 @@
 /* ─────────────────────────────────────────────
    MOBILE  (< 768px)
-   Glass card behind text, carousel edge-to-edge
-   overlapping the glass card.
+   Text box on top in normal flow, gallery directly below.
+   Section clips overflow so gallery can be cut at bottom
+   but never overlaps the text.
    ───────────────────────────────────────────── */
 .wrapper {
-    width: 100%;
-    overflow-x: hidden;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .outerContainer {
-    background: linear-gradient(180deg, #194798 0%, #081732 100%);
-    
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden;
-    overflow-y: visible;
-    position: relative;
+  background: linear-gradient(180deg, #194798 0%, #081732 100%);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100vw;
+  /* Clip the gallery if section runs out of room — never let it overflow up */
+  overflow: hidden;
+  position: relative;
 }
 
 /* Section 1 */
 .outerContainer:nth-child(1) {
-    padding-top: 4.75rem;
-    min-height: 100vh;
-    min-height: 100svh;
+  padding-top: 4.75rem;
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
 /* Section 2 */
 .outerContainer:nth-child(2) {
-    padding-top: 2rem;
-       min-height: 110vh;
-    min-height: 110svh;
+  padding-top: 2rem;
+  min-height: 110vh;
+  min-height: 110svh;
 }
 
 /* Section 3 */
 .outerContainer:nth-child(3) {
-    padding-top: 2rem;
-    /* min-height: 1vh; */
-    min-height: 110svh;
+  padding-top: 2rem;
+  min-height: 110svh;
 }
 
 .box {
-    position: relative;
-    width: calc(100% - 3rem);
-    max-width: 1200px;
-    padding-top: 1.5rem;
-    margin: 1.5rem auto 0;
-    border-radius: 1.1875rem 1.1875rem 0 0;
-    background: rgba(217, 217, 217, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-bottom: none;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    box-sizing: border-box;
-    z-index: 1;
-    flex: 1 1 auto;              /* CHANGED — allows it to grow AND shrink to fill */
-    min-height: 0;               /* NEW — flex item needs this to grow inside parent */
-    align-self: stretch;         /* NEW — guarantee it stretches vertically */
+  position: relative;
+  width: calc(100% - 3rem);
+  max-width: 1200px;
+  
+  padding: 1rem 0rem;
+  margin: 1.5rem auto 0;
+  border-radius: 1.1875rem;
+  background: rgba(217, 217, 217, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-sizing: border-box;
+  z-index: 1;
+  flex: 0 0 auto;
 }
 
 .galleryWrap {
-    width: 100%;
-    max-width: 100%;
-    height: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding: 0;
-    
-    /* CHANGED — out of flow */
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;                   /* anchor to bottom of section */
-    z-index: 2;
-    /* REMOVE: position: relative; */
-    /* REMOVE: margin-top: -16rem; */
+  width: 100%;
+  max-width: 100%;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 0;
+  /* KEY CHANGE: back in normal flow, sits below .box automatically.
+     If section runs out of vertical room, the section's overflow:hidden
+     will clip the bottom — gallery never overlaps the text. */
+  position: relative;
+  flex: 0 0 auto;
+  margin-top: 1rem;
 }
 
 .extrapad {
-    padding: 0 1.5rem;
-    width: 100%;
-    box-sizing: border-box;
+  padding: 0 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .container {
-    padding: 1rem;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
+  padding: 1rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Carousel overlaps glass card edge-to-edge (mobile only) */
-/* .galleryWrap {
-    width: 100%;
-    max-width: 100%;
-    height: 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 2;
-    margin-top: -16rem;
-    padding: 0;
-    overflow: hidden;
-} */
-
 .title h1 {
-    color: #FFF;
-    font-family: Montserrat;
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 0.0525rem;
-    text-transform: uppercase;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.0525rem;
+  text-transform: uppercase;
 }
 
 .title {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .title svg {
-    width: 2rem;
-    height: 2rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .title span:last-child {
-    font-weight: 600;
-    font-size: 2.5rem;          /* NEW — larger on mobile */
-    display: block;             /* NEW — forces it to a new line if you want it stacked */
-    line-height: 1;  
-    margin-top: 4px;
-               /* tighter line-height looks better at large size */
+  font-weight: 600;
+  font-size: 2.5rem;
+  display: block;
+  line-height: 1;
+  margin-top: 4px;
 }
 
 .desc {
-    color: #FFF;
-    font-family: Montserrat;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    margin: 1rem 0 1.5rem 0;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  margin: 1rem 0 1.5rem 0;
 }
 
 .desc span {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .button {
-    display: flex;
-    height: 2.5rem;
-    padding: 0.5rem 1rem;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 0.25rem;
-    border: 1px solid #EB7F83;
-    background: linear-gradient(319deg, #EB7F83 -1.9%, rgba(245, 174, 176, 0.00) 17.34%, #FFDBDC 87.36%), #DA2128;
-    background-blend-mode: soft-light, normal;
-    box-shadow: 0 105px 29px 0 rgba(215, 42, 48, 0.00), 0 67px 27px 0 rgba(215, 42, 48, 0.01), 0 38px 23px 0 rgba(215, 42, 48, 0.04), 0 17px 17px 0 rgba(215, 42, 48, 0.07), 0 4px 9px 0 rgba(215, 42, 48, 0.08);
-    color: #FFF;
-    font-family: Montserrat;
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    text-transform: uppercase;
-    cursor: pointer;
+  display: flex;
+  height: 2.5rem;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #eb7f83;
+  background: linear-gradient(
+      319deg,
+      #eb7f83 -1.9%,
+      rgba(245, 174, 176, 0) 17.34%,
+      #ffdbdc 87.36%
+    ),
+    #da2128;
+  background-blend-mode: soft-light, normal;
+  box-shadow: 0 105px 29px 0 rgba(215, 42, 48, 0),
+    0 67px 27px 0 rgba(215, 42, 48, 0.01),
+    0 38px 23px 0 rgba(215, 42, 48, 0.04),
+    0 17px 17px 0 rgba(215, 42, 48, 0.07),
+    0 4px 9px 0 rgba(215, 42, 48, 0.08);
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+  cursor: pointer;
 }
 
 .horizontalWrap {
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .horizontalTrack {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
 }
 
 .footerWrap {
-    width: 100%;
+  width: 100%;
 }
-
 
 /* ─────────────────────────────────────────────
    TABLET  (≥ 768px)
    Reset .box — no glass card, normal stack as before.
    ───────────────────────────────────────────── */
 @media only screen and (min-width: 768px) {
-     .outerContainer {
-        padding: 6rem 0 0 0;
-        display: flex;
-        justify-content: center;       /* this centers vertically since flex-direction: column */
-        align-items: center;           /* this centers horizontally */
-    }
-      .outerContainer:nth-child(1),
-    .outerContainer:nth-child(2),
-    .outerContainer:nth-child(3) {
-        min-height: 100vh;
-        min-height: 100svh;
-    }
+  .outerContainer {
+    padding: 6rem 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .box {
+  .outerContainer:nth-child(1),
+  .outerContainer:nth-child(2),
+  .outerContainer:nth-child(3) {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  /* .box {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -231,63 +218,63 @@
     -webkit-backdrop-filter: none;
     box-shadow: none;
     z-index: auto;
-    
-    /* NEW — reset mobile flex behavior */
     flex: 0 1 auto;
     min-height: auto;
     align-self: auto;
-}
+  } */
 
-    .extrapad {
-        padding: 0 3rem;
-        display: flex;                 /* NEW */
-        justify-content: center;       /* NEW — centers .container horizontally */
-    }
+  .extrapad {
+    padding: 0 3rem;
+    display: flex;
+    justify-content: center;
+  }
 
-    .container {
-        max-width: 1200px;
-        width: 100%;                   /* NEW — fills up to max-width */
-        margin: 0 auto;                /* NEW — fallback centering */
-        padding: 2rem;
-        border-radius: 1rem;
-        border: 1px solid #9BBBF1;
-        background: rgba(217, 217, 217, 0.20);
-        box-shadow: 8px 8px 32px 0 rgba(0, 0, 0, 0.04), 8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset;
-    }
+  .container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    /* border-radius: 1rem; */
+    /* border: 1px solid #9bbbf1;
+    background: rgba(217, 217, 217, 0.2);
+    box-shadow:
+      8px 8px 32px 0 rgba(0, 0, 0, 0.04),
+      8px 8px 32px 0 rgba(0, 0, 0, 0.08) inset; */
+  }
 
-    .title h1 {
-        font-size: 3rem;
-    }
+  .title h1 {
+    font-size: 3rem;
+  }
 
-    .desc {
-        font-size: 1.125rem;
-        margin: 0.5rem 0 1.5rem 0;
-    }
+  .desc {
+    font-size: 1.125rem;
+    margin: 0.5rem 0 1.5rem 0;
+  }
 
-    .button {
-        font-size: 1.125rem;
-        padding: 1rem 1.5rem;
-        height: 3rem;
-    }
+  .button {
+    font-size: 1.125rem;
+    padding: 1rem 1.5rem;
+    height: 3rem;
+  }
 
-   .galleryWrap {
-        position: static;        /* NEW — back to normal flow */
-        bottom: auto;            /* NEW — clear mobile value */
-        left: auto;              /* NEW */
-        right: auto;             /* NEW */
-        padding: 0 3rem;
-        height: 480px;
-        margin-top: 1rem;
-        overflow: hidden;
-        z-index: auto;
-    }
-           .title span:last-child {
-        font-size: inherit;     /* NEW — back to normal h1 size */
-        display: inline;        /* NEW — back to inline if you used display: block above */
-        line-height: normal;
+  .galleryWrap {
+    position: static;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    padding: 0 3rem;
+    height: 480px;
+    margin-top: 1rem;
+    overflow: hidden;
+    z-index: auto;
+  }
+
+  .title span:last-child {
+    font-size: inherit;
+    display: inline;
+    line-height: normal;
     margin-top: 0px;
-
-    }
+  }
 }
 
 /* ─────────────────────────────────────────────
@@ -296,83 +283,83 @@
    and translates .horizontalTrack on X.
    ───────────────────────────────────────────── */
 @media only screen and (min-width: 1024px) {
-    .wrapper {
-        overflow-x: hidden;
-    }
+  .wrapper {
+    overflow-x: hidden;
+  }
 
-    .horizontalWrap {
-        position: relative;
-        height: 100vh;
-        height: 100svh;
-        width: 100%;
-        max-width: none;
-        overflow: hidden;
-    }
+  .horizontalWrap {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+  }
 
-    .horizontalTrack {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: max-content;
-        max-width: none;
-        will-change: transform;
-    }
+  .horizontalTrack {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: max-content;
+    max-width: none;
+    will-change: transform;
+  }
 
-    .outerContainer {
-        flex: 0 0 100vw;
-        width: 100vw;
-        max-width: 100vw;
-        height: 100vh;
-        height: 100svh;
-        min-height: 0;
-        padding: 5.5rem 0 0 0;
-        overflow: hidden;
-    }
+  .outerContainer {
+    flex: 0 0 100vw;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    height: 100svh;
+    min-height: 0;
+    padding: 5.5rem 0 0 0;
+    overflow: hidden;
+  }
 
-    .outerContainer:nth-child(2) {
-        padding-top: 5rem;
-    }
-    .outerContainer:nth-child(3) {
-        padding-top: 5rem;
-    }
+  .outerContainer:nth-child(2) {
+    padding-top: 5rem;
+  }
+  .outerContainer:nth-child(3) {
+    padding-top: 5rem;
+  }
 
-    .title {
-        align-items: center;
-    }
+  .title {
+    align-items: center;
+  }
 
-    .container {
-        border-radius: 1.5rem;
-    }
+  .container {
+    border-radius: 1.5rem;
+  }
 
-    .galleryWrap {
-        flex: 1;
-        height: auto;
-        min-height: 0;
-        align-items: stretch;
-        margin-top: 1.5rem;
-        overflow: hidden;
-    }
+  .galleryWrap {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    align-items: stretch;
+    margin-top: 1.5rem;
+    overflow: hidden;
+  }
 }
 
 @media only screen and (min-width: 1440px) {
-    .outerContainer {
-        padding: 5.5rem 5rem 0 5rem;
-    }
+  .outerContainer {
+    padding: 5.5rem 5rem 0 5rem;
+  }
 
-    .container {
-        padding: 2rem 2.5rem;
-    }
+  .container {
+    padding: 2rem 2.5rem;
+  }
 
-    .title h1 {
-        font-size: 4rem;
-    }
+  .title h1 {
+    font-size: 4rem;
+  }
 
-    .desc {
-        font-size: 1.25rem;
-        margin: 0.5rem 0 2rem 0;
-    }
+  .desc {
+    font-size: 1.25rem;
+    margin: 0.5rem 0 2rem 0;
+  }
 
-    .galleryWrap {
-        padding: 0 5rem;
-    }
+  .galleryWrap {
+    padding: 0 5rem;
+  }
 }
